@@ -1,14 +1,13 @@
-import React, { PropTypes } from 'react';
+// @flow
+import React from 'react';
 import { graphql, compose } from 'react-apollo';
 import injectSheet from 'react-jss';
 import gql from 'graphql-tag';
 import QuestionList from 'app/components/questionnaire/QuestionList';
 
-const propTypes = {
-  // isFetching: PropTypes.bool,
-  // addUser: PropTypes.func.isRequired,
-  // users: PropTypes.array
-};
+type Props = {
+  classes: Object
+}
 
 const questions = [
   'To set clear goals?',
@@ -18,7 +17,7 @@ const questions = [
   'To build positive relationships?',
   'To be fully engaged?'
 ]
-const Home = ({ classes: c }) => (
+const Home = ({ classes: c }: Props) => (
   <div className={c.container}>
     <h3 className={c.headline}>Did I do my best...</h3>
     <QuestionList questions={questions}/>
@@ -35,8 +34,6 @@ const Home = ({ classes: c }) => (
     </ul> */}
   </div>
 );
-
-Home.propTypes = propTypes;
 
 /**
  * Query Data

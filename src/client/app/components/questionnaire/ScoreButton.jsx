@@ -1,14 +1,15 @@
-import React, { PropTypes } from 'react';
+// @flow
+import React from 'react';
 import injectSheet from 'react-jss'
 
-const propTypes = {
-  classes: PropTypes.object,
-  score: PropTypes.string
-};
+type Props = {
+  classes: Object,
+  score: Number
+}
 
-const ScoreButton = ({ classes: c, score }: PropTypes) => (
+const ScoreButton = ({ classes: c, score }: Props) => (
   <div className={c.container}>
-    <span className={c.score}>{score}</span>
+    <span className={c.score}>{score.toString()}</span>
   </div>
 );
 

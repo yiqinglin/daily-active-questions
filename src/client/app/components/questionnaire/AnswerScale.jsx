@@ -1,13 +1,14 @@
-import React, { PropTypes } from 'react';
+// @flow
+import React from 'react';
 import injectSheet from 'react-jss'
 import ScoreButton from './ScoreButton';
 
-const propTypes = {
-  classes: PropTypes.object,
-  score: PropTypes.integer
-};
+type Props = {
+  classes: Object,
+  score: number
+}
 
-const Question = ({ classes: c, score }: PropTypes) => (
+const Question = ({ classes: c, score }: Props) => (
   <div className={c.container}>
     {[...Array(11).keys()].map(i => <ScoreButton score={i} key={i}/>)}
   </div>

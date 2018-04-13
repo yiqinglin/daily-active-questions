@@ -1,11 +1,12 @@
-import React, { PropTypes } from 'react';
+// @flow
+import React from 'react';
 import injectSheet from 'react-jss'
 
-const propTypes = {
-  classes: PropTypes.object
-};
+type Props = {
+  classes: Object
+}
 
-const Avatar = ({classes: c}: PropTypes) => (
+const Avatar = ({classes: c}: Props) => (
   <div className={c.avatar}>
     
   </div>

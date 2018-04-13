@@ -1,12 +1,13 @@
-import React, { PropTypes } from 'react';
+// @flow
+import React from 'react';
 import injectSheet from 'react-jss'
 import Avatar from './Avatar';
 
-const propTypes = {
-  classes: PropTypes.object
-};
+type Props = {
+  classes: Object
+}
 
-const Header = ({ classes: c }: PropTypes) => (
+const Header = ({ classes: c }: Props) => (
   <div className={c.header}>
     <Avatar />
     Profile

@@ -1,13 +1,14 @@
-import React, { PropTypes } from 'react';
+// @flow
+import React from 'react';
 import injectSheet from 'react-jss'
 import Question from './Question';
 
-const propTypes = {
-  classes: PropTypes.object,
-  questions: PropTypes.array
-};
+type Props = {
+  classes: Object,
+  questions: Array<string>
+}
 
-const QuestionList = ({ classes: c, questions }: PropTypes) => (
+const QuestionList = ({ classes: c, questions }: Props) => (
   <div className={c.container}>
     {questions.map((q, i) => <Question question={q} key={i}/>)}
   </div>

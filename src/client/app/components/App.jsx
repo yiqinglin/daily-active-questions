@@ -1,21 +1,19 @@
-import React, { PropTypes } from 'react';
+// @flow
+import React from 'react';
 import injectSheet from 'react-jss';
 import Home from 'app/components/Home';
 import Header from 'app/components/header/Header';
 
-const propTypes = {
-  classes: PropTypes.object
-};
+type Props = {
+  classes: Object
+}
 
-
-const App = ({ classes: c }) => (
+const App = ({ classes: c }: Props) => (
   <div className={c.container}>
     <Header />
     <Home />
   </div>
 );
-
-App.propTypes = propTypes;
 
 const styles = {
   container: {
