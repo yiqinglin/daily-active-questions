@@ -2,15 +2,50 @@
 import 'babel-polyfill';
 import express from 'express';
 import bodyParser from 'body-parser';
-import mongoose from 'mongoose';
 import { graphqlExpress, graphiqlExpress } from 'graphql-server-express';
 import settings from 'settings';
 import schema from 'schema';
 
-/**
- * Initialize the database.
- */
-mongoose.connect(settings.MONGO_URI);
+
+// import firebase from 'firebase';
+
+// const config = {
+//   apiKey: "AIzaSyBgXUCCWdiQXtZQR9pQ3Ko9sNDqweOAz_Q",
+//   authDomain: "daily-active-questions.firebaseapp.com",
+//   databaseURL: "https://daily-active-questions.firebaseio.com",
+//   projectId: "daily-active-questions",
+//   storageBucket: "daily-active-questions.appspot.com",
+//   messagingSenderId: "612912991604"
+// };
+// const fiebaseApp = firebase.initializeApp(config);
+// const db = fiebaseApp.database();
+// firebaseDatabase.ref(`questions/axQIJ6mBszpnETjiJKOl`).once('value').then(snapshot => console.log(snapshot.val()));
+
+const admin = require('firebase-admin');
+
+var serviceAccount = require('../../daily-active-questions-firebase-adminsdk-qrgh4-b8674391d6.json');
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount)
+});
+var db = admin.firestore();
+
+// Write
+var docRef = db.collection('questions').doc('testquestion');
+var setAda = docRef.set({
+  question: 'to read documentation?'
+});
+
+// Read
+db.collection('questions').get()
+    .then((snapshot) => {
+      snapshot.forEach((doc) => {
+        console.log(doc.id, '=>', doc.data());
+      });
+    })
+    .catch((err) => {
+      console.log('Error getting documents', err);
+    });
 
 /**
  * Initialize the application.
