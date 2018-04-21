@@ -1,5 +1,11 @@
 # Daily Active Questions
 
+## To set up
+
+```
+npm install
+```
+
 ## To run app
 
 **NOTE:**  make sure you are running node 7 or later.
@@ -7,11 +13,11 @@
 ### Terminal #1:
 
 ```
-npm install
-npm run dev
+docker-compose up - d
+make serve
 ```
 
 ### Terminal #2:
 ```
-docker-compose up
+npm run dev
 ```
