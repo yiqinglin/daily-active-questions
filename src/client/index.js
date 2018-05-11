@@ -5,8 +5,14 @@ import ReactDOM from 'react-dom';
 import App from 'app/components/App';
 import ApolloClient from 'apollo-client';
 import { ApolloProvider } from 'react-apollo';
+import { createHttpLink } from "apollo-link-http";
 
-const client = new ApolloClient();
+const link = createHttpLink({
+  uri: "/graphql",
+  credentials: 'same-origin'
+});
+const client = new ApolloClient({ link });
+
 const app = (
   <ApolloProvider client={client}>
     <App />

@@ -26,7 +26,8 @@ module.exports = [
       * Access config from anywhere via `import settings from 'settings'``
       */
       alias: {
-        settings: path.resolve(__dirname, './settings.js')
+        settings: path.resolve(__dirname, './settings.js'),
+        '~': path.resolve(__dirname, './src/client')        
       }
     },
     module: {
@@ -81,7 +82,8 @@ module.exports = [
       * Access config from anywhere via `import settings from 'settings'``
       */
       alias: {
-        settings: path.resolve(__dirname, './settings.js')
+        settings: path.resolve(__dirname, './settings.js'),
+        '~': path.resolve(__dirname, './src/server')
       }
     },
     module: {

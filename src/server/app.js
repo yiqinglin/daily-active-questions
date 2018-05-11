@@ -1,34 +1,24 @@
 /* eslint-disable no-console, newline-after-var */
 import 'babel-polyfill';
+import "isomorphic-fetch"
+import cors from 'cors';
 import express from 'express';
+import session from 'express-session';
 import bodyParser from 'body-parser';
+import firebase from 'firebase';
+import firebaseAdmin from 'firebase-admin';
+import passport from 'passport';
 import { graphqlExpress, graphiqlExpress } from 'graphql-server-express';
 import settings from 'settings';
 import schema from 'schema';
 
+// Initialize firebase db.
+const serviceAccount = require('../../daily-active-questions-firebase-adminsdk-qrgh4-b8674391d6.json');
 
-// import firebase from 'firebase';
-
-// const config = {
-//   apiKey: "AIzaSyBgXUCCWdiQXtZQR9pQ3Ko9sNDqweOAz_Q",
-//   authDomain: "daily-active-questions.firebaseapp.com",
-//   databaseURL: "https://daily-active-questions.firebaseio.com",
-//   projectId: "daily-active-questions",
-//   storageBucket: "daily-active-questions.appspot.com",
-//   messagingSenderId: "612912991604"
-// };
-// const fiebaseApp = firebase.initializeApp(config);
-// const db = fiebaseApp.database();
-// firebaseDatabase.ref(`questions/axQIJ6mBszpnETjiJKOl`).once('value').then(snapshot => console.log(snapshot.val()));
-
-const admin = require('firebase-admin');
-
-var serviceAccount = require('../../daily-active-questions-firebase-adminsdk-qrgh4-b8674391d6.json');
-
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount)
+const firebaseApp = firebaseAdmin.initializeApp({
+  credential: firebaseAdmin.credential.cert(serviceAccount)
 });
-var db = admin.firestore();
+const db = firebaseAdmin.firestore();
 
 // Write
 var docRef = db.collection('questions').doc('testquestion');
@@ -38,30 +28,50 @@ var setAda = docRef.set({
 
 // Read
 db.collection('questions').get()
-    .then((snapshot) => {
-      snapshot.forEach((doc) => {
-        console.log(doc.id, '=>', doc.data());
-      });
-    })
-    .catch((err) => {
-      console.log('Error getting documents', err);
+  .then((snapshot) => {
+    snapshot.forEach((doc) => {
+      console.log(doc.id, '=>', doc.data());
     });
+  })
+  .catch((err) => {
+    console.log('Error getting documents', err);
+  });
 
 /**
  * Initialize the application.
  */
 const app = module.exports = express();
 
+app.db = db;
 /**
  * Support json & urlencoded requests.
  */
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
+function loginmiddleware(req, res, next) {
+  console.log('login middleware', req.user && req.user.id);
+  next();
+}
+
+/**
+ * Initialize Passport
+ */
+app.use(session({
+  secret: 'a-very-secret-sauce',
+  cookie: { maxAge: 2628000000 }
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+
 /**
  * GraphQL
  */
-app.use('/graphql', bodyParser.json(), graphqlExpress({ schema }));
+
+app.use('/graphql', bodyParser.json(), graphqlExpress(req =>({
+  schema,
+  context: req
+})));
 
 if (process.env.NODE_ENV !== 'production') {
   app.use('/graphiql', graphiqlExpress({
@@ -73,6 +83,11 @@ if (process.env.NODE_ENV !== 'production') {
  * Serve files in the /public directory as static files.
  */
 app.use(express.static('public'));
+app.use(loginmiddleware);
+/**
+ * Auth routes
+ */
+require('./services/auth');
 
 /**
  * Byh default, serve our index.html file

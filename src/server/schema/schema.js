@@ -3,29 +3,28 @@ export default /* GraphQL */`
 
 # Users
 type User {
-  _id: ID!
-  username: String!
+  id: ID!
+  avatar: String
+  language: String
+  displayName: String
 }
 
 # Todos
 type Todo {
-  _id: ID!
-  _owner: User
+  id: ID!
   title: String
   completed: Boolean!
 }
 
 # the schema allows the following query:
 type Query {
-  users: [User]
+  user: User
   todos: [Todo]
 }
 
 # this schema allows the following mutation:
 type Mutation {
-  addUser (
-    username: String!
-  ): User
+  login: User
 }
 
 # we need to tell the server which types represent the root query

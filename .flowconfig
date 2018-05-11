@@ -1,12 +1,12 @@
 [ignore]
 
 <PROJECT_ROOT>/public/.*
-<PROJECT_ROOT>/src/server/.*
 .*/node_modules/json/test/.*
 <PROJECT_ROOT>/.*/node_modules/bcryptjs/src/bower.json
 
 [include]
 <PROJECT_ROOT>/src/client/.*
+<PROJECT_ROOT>/src/server/.*
 
 [libs]
 ./node_modules/fbjs/flow/lib/dev.js

@@ -1,14 +1,17 @@
 export default {
   Query: {
-    async users() {
-      return {};
+    user(obj, args, context) {
+      const { user } = context;
+
+      console.log('user in context', user);
+      return user;
     },
     async todos() {
       return {};
     }
   },
   Mutation: {
-    async addUser(_, { username }) {
+    async login() {
       return {};
     }
   }
