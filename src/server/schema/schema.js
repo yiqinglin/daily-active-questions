@@ -1,25 +1,33 @@
 /* eslint-disable */
 export default /* GraphQL */`
 
+# Answers
+type Answer {
+  timestamp: Float
+  value: Float
+}
+
+# Questions
+type Question {
+  id: ID!
+  active: Float
+  title: String
+  answer: Float
+}
+
 # Users
 type User {
   id: ID!
   avatar: String
   language: String
   displayName: String
-}
-
-# Todos
-type Todo {
-  id: ID!
-  title: String
-  completed: Boolean!
+  questions: [Question]
 }
 
 # the schema allows the following query:
 type Query {
   user: User
-  todos: [Todo]
+  activeQuestions: [Question]
 }
 
 # this schema allows the following mutation:

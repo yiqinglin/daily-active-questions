@@ -18,24 +18,7 @@ const serviceAccount = require('../../daily-active-questions-firebase-adminsdk-q
 const firebaseApp = firebaseAdmin.initializeApp({
   credential: firebaseAdmin.credential.cert(serviceAccount)
 });
-const db = firebaseAdmin.firestore();
-
-// Write
-var docRef = db.collection('questions').doc('testquestion');
-var setAda = docRef.set({
-  question: 'to read documentation?'
-});
-
-// Read
-db.collection('questions').get()
-  .then((snapshot) => {
-    snapshot.forEach((doc) => {
-      console.log(doc.id, '=>', doc.data());
-    });
-  })
-  .catch((err) => {
-    console.log('Error getting documents', err);
-  });
+export const db = firebaseAdmin.firestore();
 
 /**
  * Initialize the application.
