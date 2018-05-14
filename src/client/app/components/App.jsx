@@ -1,11 +1,15 @@
 // @flow
 import React from 'react';
 import injectSheet from 'react-jss';
+import { compose } from 'react-apollo';
 import Home from 'app/components/Home';
 import Header from 'app/components/header/Header';
+import withUser from 'app/composers/queries/withUser';
 
 type Props = {
-  classes: Object
+  classes: Object,
+  user: Object,
+  isFetching: Boolean
 }
 
 const App = ({ classes: c }: Props) => (
@@ -25,4 +29,7 @@ const styles = {
   }
 };
 
-export default injectSheet(styles)(App);
+export default compose(
+  withUser,
+  injectSheet(styles) 
+)(App);
