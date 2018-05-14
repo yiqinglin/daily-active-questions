@@ -1,5 +1,4 @@
 import * as app from '~/app';
-import * as utils from '~/utils';
 
 export default {
   Query: {

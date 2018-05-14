@@ -20,6 +20,7 @@ const firebaseApp = firebaseAdmin.initializeApp({
 });
 export const db = firebaseAdmin.firestore();
 
+const FirestoreStore = require('firestore-store')(session);
 /**
  * Initialize the application.
  */
@@ -41,8 +42,13 @@ function loginmiddleware(req, res, next) {
  * Initialize Passport
  */
 app.use(session({
+  store:  new FirestoreStore( {
+    database: db
+  } ),
   secret: 'a-very-secret-sauce',
-  cookie: { maxAge: 2628000000 }
+  cookie: { maxAge: 2628000000 },
+  resave: false,
+  saveUninitialized: false
 }));
 app.use(passport.initialize());
 app.use(passport.session());
