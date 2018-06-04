@@ -59,6 +59,27 @@ export default {
   Mutation: {
     async login() {
       return {};
+    },
+    async answer(obj, args, context) {
+      const { user } = context;
+      const { score, questionId, timestamp } = args;
+      
+      if (!user) {
+        throw Error('Log in is required.');
+      }
+      if (!score || !questionId) {
+        throw Error('Required parameters not found.');
+      }
+
+      await app.db.collection('answers')
+        .add({
+          timestamp,
+          questionId,
+          value: score,
+          userId: user.id
+        });
+
+      return;
     }
   }
 };

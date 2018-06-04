@@ -33,6 +33,7 @@ type Query {
 # this schema allows the following mutation:
 type Mutation {
   login: User
+  answer(score: Float, questionId: String, timestamp: Float): Answer
 }
 
 # we need to tell the server which types represent the root query
