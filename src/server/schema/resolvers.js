@@ -23,35 +23,35 @@ export default {
       const res = [];
       const questionIds = [];
 
+      // Get active questions based on user id.
       const quesRef = await app.db
         .collection('questions')
         .where('userId', '==', user.id)
         .where('active', '>', 0)
         .get();
+      
+      // Get today's answers.
+      const ansRef = await app.db
+        .collection('answers')
+        .where('userId', '==', user.id)
+        .where('timestamp', '>=', todayBeginsAt)
+        .get();
 
       quesRef.forEach(snapshot => {
-        const answerRef = app.db
-          .collection('answers')
-          .where('userId', '==', user.id)
-          .where('questionId', '==', snapshot.id)
-          .where('timestamp', '>=', todayBeginsAt);
-
-        promises.push(answerRef.get());
-        res.push(snapshot.data())
+        res.push(snapshot.data());
       });
-
-      const results = await Promise.all(promises);
-      results.forEach(querySnapshot => {
-        querySnapshot.forEach(doc => {
-          const answer = doc.data();
-          const index = res.findIndex(q => q.id === answer.questionId);
-
-          res.splice(index, 1, {
-            ...res[index],
-            answer: answer.value
-          });
+      ansRef.forEach(snapshot => {
+        const answers = snapshot.data().values;
+        
+        Object.keys(answers).map((qid) => {
+          // Insert the answer value to res using questionId.
+          const targetIndex = res.findIndex(item => item.id === qid);
+          res.splice(targetIndex, 1, {
+            ...res[targetIndex],
+            answer: answers[qid]
+          })
         });
-      })
+      });
 
       return res;
     }
