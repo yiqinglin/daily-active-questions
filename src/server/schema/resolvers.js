@@ -62,20 +62,23 @@ export default {
     },
     async answer(obj, args, context) {
       const { user } = context;
-      const { score, questionId, timestamp } = args;
+      const { answers, timestamp } = args;
+      let values = {};
       
       if (!user) {
         throw Error('Log in is required.');
       }
-      if (!score || !questionId) {
+      if (!answers || answers.length === 0) {
         throw Error('Required parameters not found.');
       }
+
+      // Convert the answers array to key-value pairs.
+      answers.map(answer => values[answer.questionId] = answer.value);
 
       await app.db.collection('answers')
         .add({
           timestamp,
-          questionId,
-          value: score,
+          values,
           userId: user.id
         });
 
