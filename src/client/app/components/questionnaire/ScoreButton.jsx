@@ -1,14 +1,20 @@
 // @flow
 import React from 'react';
-import injectSheet from 'react-jss'
+import injectSheet from 'react-jss';
+import classeNames from 'classnames';
 
 type Props = {
   classes: Object,
-  score: Number
+  score: Number,
+  onClick: Number => void,
+  isSelected: Boolean
 }
 
-const ScoreButton = ({ classes: c, score }: Props) => (
-  <div className={c.container}>
+const ScoreButton = ({ classes: c, score, onClick, isSelected }: Props) => (
+  <div
+    className={classeNames(c.container, isSelected && c.selected)}
+    onClick={() => onClick(score)}
+  >
     <span className={c.score}>{score.toString()}</span>
   </div>
 );
@@ -26,6 +32,9 @@ const styles = {
   },
   score: {
     fontSize: '11px'
+  },
+  selected: {
+    color: 'pink'
   }
 };
 

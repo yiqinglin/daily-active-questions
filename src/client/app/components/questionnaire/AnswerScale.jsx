@@ -5,12 +5,21 @@ import ScoreButton from './ScoreButton';
 
 type Props = {
   classes: Object,
-  score: number
+  score: number,
+  selected: number,
+  onSelect: () => void
 }
 
-const Question = ({ classes: c, score }: Props) => (
+const AnswerScale = ({ classes: c, score, onSelect, selected }: Props) => (
   <div className={c.container}>
-    {[...Array(11).keys()].map(i => <ScoreButton score={i} key={i}/>)}
+    {[...Array(11).keys()].map(i => 
+      <ScoreButton
+        isSelected={selected === i}
+        score={i}
+        key={i}
+        onClick={onSelect}
+      />)
+    }
   </div>
 );
 
@@ -22,4 +31,4 @@ const styles = {
   }
 };
 
-export default injectSheet(styles)(Question);
+export default injectSheet(styles)(AnswerScale);

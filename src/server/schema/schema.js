@@ -1,11 +1,7 @@
 /* eslint-disable */
 export default /* GraphQL */`
 
-# Answers
-type Answer {
-  timestamp: Float
-  value: Float
-}
+scalar JSON
 
 # Questions
 type Question {
@@ -24,12 +20,6 @@ type User {
   questions: [Question]
 }
 
-# Answers 
-input Answers {
-  questionId: String
-  value: Float
-}
-
 # the schema allows the following query:
 type Query {
   user: User
@@ -39,7 +29,7 @@ type Query {
 # this schema allows the following mutation:
 type Mutation {
   login: User
-  answer(answers: [Answers], timestamp: Float): Boolean
+  answer(answers: JSON): Boolean
 }
 
 # we need to tell the server which types represent the root query

@@ -5,13 +5,14 @@ import AnswerScale from './AnswerScale';
 
 type Props = {
   classes: Object,
-  question: String
+  question: String,
+  children: Node
 }
 
-const Question = ({ classes: c, question }: Props) => (
+const Question = ({ classes: c, question, children }: Props) => (
   <div className={c.container}>
     <h4>{question}</h4>
-    <AnswerScale />
+    {children}
   </div>
 );
 

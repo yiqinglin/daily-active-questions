@@ -1,4 +1,5 @@
 import * as app from '~/app';
+import GraphQLJSON from 'graphql-type-json';
 
 export default {
   Query: {
@@ -62,27 +63,27 @@ export default {
     },
     async answer(obj, args, context) {
       const { user } = context;
-      const { answers, timestamp } = args;
-      let values = {};
-      
+      const { answers } = args;
+
+      // Get current date in millieseconds.      
+      const timestamp = new Date().getTime();
+
       if (!user) {
         throw Error('Log in is required.');
       }
-      if (!answers || answers.length === 0) {
+      if (!answers) {
         throw Error('Required parameters not found.');
       }
-
-      // Convert the answers array to key-value pairs.
-      answers.map(answer => values[answer.questionId] = answer.value);
 
       await app.db.collection('answers')
         .add({
           timestamp,
-          values,
+          values: answers,
           userId: user.id
         });
 
       return;
     }
-  }
+  },
+  JSON: GraphQLJSON
 };

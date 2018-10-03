@@ -9,29 +9,10 @@ type Props = {
   classes: Object
 }
 
-const questions = [
-  'To set clear goals?',
-  'To make progress for achieving my goals?',
-  'To find meaning?',
-  'To be happy?',
-  'To build positive relationships?',
-  'To be fully engaged?'
-]
 const Home = ({ classes: c }: Props) => (
   <div className={c.container}>
     <h3 className={c.headline}>Did I do my best...</h3>
-    <QuestionList questions={questions}/>
-    {/* <button
-      onClick={() => !isFetching && addUser(`User${Date.now()}`)}
-    >
-      Add a user
-    </button>
-    <h5>Users</h5>
-    <ul>
-      {users.map(user =>
-        <li key={user.username}>{user.username}</li>
-      )}
-    </ul> */}
+    <QuestionList />
   </div>
 );
 

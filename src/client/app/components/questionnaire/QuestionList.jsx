@@ -3,24 +3,71 @@ import React from 'react';
 import injectSheet from 'react-jss';
 import { compose } from 'react-apollo';
 import withActiveQuestions from 'app/composers/queries/withActiveQuestions';
+import withSubmitAnswers from 'app/composers/mutations/withSubmitAnswers';
 import Question from './Question';
+import AnswerScale from './AnswerScale';
 
 type Props = {
   classes: Object,
-  questions: Array<string>,
   activeQuestions: Array<Object>,
+  answer: Object => void,
   isFetching: Boolean
 }
 
-const QuestionList = ({ classes: c, questions, activeQuestions, isFetching }: Props) => {
-  if (isFetching) {
-    return null;
+type State = {
+  updatedAnswers: Object
+}
+
+class QuestionList extends React.Component<Props, State> {
+  constructor(props) {
+    super(props);
+    this.state = {
+      updatedAnswers: {}
+    };
   }
-  return (
-    <div className={c.container}>
-      {questions.map((q, i) => <Question question={q} key={i}/>)}
-    </div>
-  );
+
+  updateAnswer = (questionId, value) => {
+    const { updatedAnswers } = this.state;
+    updatedAnswers[questionId] = value;
+
+    this.setState({updatedAnswers});
+  }
+
+  onSubmit = () => {
+    const { updatedAnswers } = this.state;
+
+    this.props.answer(updatedAnswers)
+      .then(() => console.log('done!'))
+      .catch(() => console.log('problem!'));
+  }
+
+  render() {
+    const { classes: c, activeQuestions, isFetching } = this.props;
+
+    if (isFetching) {
+      return <div className={c.container}>Retrieving question list...</div>;
+    }
+    if (activeQuestions.length == 0) {
+      return (
+        <div className={c.container}>Add a new question...</div>
+      )
+    }
+    return (
+      <div className={c.container}>
+        {activeQuestions.map((q, i) => {
+          return (
+            <Question question={q.title} key={i}>
+              <AnswerScale 
+                selected={q.answer}
+                onSelect={v => this.updateAnswer(q.id, v)}
+              />
+            </Question>
+          );
+        })}
+        <button onClick={this.onSubmit}>Submit</button>
+      </div>
+    );
+  }
 }
 
 const styles = {
@@ -30,5 +77,6 @@ const styles = {
 
 export default compose(
   injectSheet(styles),
-  withActiveQuestions
+  withActiveQuestions,
+  withSubmitAnswers
 )(QuestionList);
