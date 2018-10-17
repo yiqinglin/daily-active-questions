@@ -15,18 +15,19 @@ type Props = {
 }
 
 type State = {
-  updatedAnswers: Object
+  updatedAnswers: Object,
+  isEditing: Boolean
 }
 
 class QuestionList extends React.Component<Props, State> {
-  constructor(props) {
-    super(props);
-    this.state = {
-      updatedAnswers: {}
-    };
+  state = {
+    updatedAnswers: {},
+    isEditing: false
   }
 
   updateAnswer = (questionId, value) => {
+    if (!this.state.isEditing) return;
+
     const { updatedAnswers } = this.state;
     updatedAnswers[questionId] = value;
 
@@ -43,6 +44,7 @@ class QuestionList extends React.Component<Props, State> {
 
   render() {
     const { classes: c, activeQuestions, isFetching } = this.props;
+    const { isEditing } = this.state;
 
     if (isFetching) {
       return <div className={c.container}>Retrieving question list...</div>;
@@ -58,13 +60,22 @@ class QuestionList extends React.Component<Props, State> {
           return (
             <Question question={q.title} key={i}>
               <AnswerScale 
-                selected={q.answer}
+                selected={isEditing ? this.state.updatedAnswers[q.id] : q.answer}
                 onSelect={v => this.updateAnswer(q.id, v)}
               />
             </Question>
           );
         })}
-        <button onClick={this.onSubmit}>Submit</button>
+        <button onClick={() => this.setState({
+          isEditing: !isEditing,
+          updatedAnswers: {}
+        })}>
+          {isEditing ? 'Cancel' : 'Edit'}
+        </button>
+        <button
+          onClick={this.onSubmit}
+          disabled={!isEditing}
+        >Submit</button>
       </div>
     );
   }
