@@ -10,13 +10,13 @@ import AnswerScale from './AnswerScale';
 type Props = {
   classes: Object,
   activeQuestions: Array<Object>,
-  answer: Object => void,
-  isFetching: Boolean
+  answer: Function,
+  isFetching: boolean
 }
 
 type State = {
-  updatedAnswers: Object,
-  isEditing: Boolean
+  updatedAnswers: { [string]: number },
+  isEditing: boolean
 }
 
 class QuestionList extends React.Component<Props, State> {
