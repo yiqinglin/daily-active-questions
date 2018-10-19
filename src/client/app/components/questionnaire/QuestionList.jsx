@@ -6,6 +6,7 @@ import withActiveQuestions from 'app/composers/queries/withActiveQuestions';
 import withSubmitAnswers from 'app/composers/mutations/withSubmitAnswers';
 import Question from './Question';
 import AnswerScale from './AnswerScale';
+import AddQuestion from './AddQuestion';
 
 type Props = {
   classes: Object,
@@ -38,7 +39,7 @@ class QuestionList extends React.Component<Props, State> {
     const { updatedAnswers } = this.state;
 
     this.props.answer(updatedAnswers)
-      .then(() => console.log('done!'))
+      .then(() => this.setState({ isEditing: false }))
       .catch(() => console.log('problem!'));
   }
 
@@ -66,16 +67,19 @@ class QuestionList extends React.Component<Props, State> {
             </Question>
           );
         })}
-        <button onClick={() => this.setState({
-          isEditing: !isEditing,
-          updatedAnswers: {}
-        })}>
-          {isEditing ? 'Cancel' : 'Edit'}
-        </button>
-        <button
-          onClick={this.onSubmit}
-          disabled={!isEditing}
-        >Submit</button>
+        <AddQuestion />
+        <div>
+          <button onClick={() => this.setState({
+            isEditing: !isEditing,
+            updatedAnswers: {}
+          })}>
+            {isEditing ? 'Cancel' : 'Edit'}
+          </button>
+          <button
+            onClick={this.onSubmit}
+            disabled={!isEditing}
+          >Submit</button>
+        </div>
       </div>
     );
   }
