@@ -4,6 +4,7 @@ import injectSheet from 'react-jss';
 import { compose } from 'react-apollo';
 import withActiveQuestions from 'app/composers/queries/withActiveQuestions';
 import withSubmitAnswers from 'app/composers/mutations/withSubmitAnswers';
+import withDeleteQuestion from 'app/composers/mutations/withDeleteQuestion';
 import Question from './Question';
 import AnswerScale from './AnswerScale';
 import AddQuestion from './AddQuestion';
@@ -12,6 +13,7 @@ type Props = {
   classes: Object,
   activeQuestions: Array<Object>,
   answer: Function,
+  deleteQuestion: Function,
   isFetching: boolean
 }
 
@@ -43,6 +45,16 @@ class QuestionList extends React.Component<Props, State> {
       .catch(() => console.log('problem!'));
   }
 
+  handleDelete = (question) => {
+    const confirmed = confirm(`Please confirm you\'d like to stop tracking this question:\n${question.title}`);
+    if (confirmed) {
+      this.props.deleteQuestion(question.id)
+      .then(() => confirm('The question has been deleted'))
+      .catch(() => alert('problem!'));
+    }
+    
+  }
+
   render() {
     const { classes: c, activeQuestions, isFetching } = this.props;
     const { isEditing } = this.state;
@@ -50,6 +62,12 @@ class QuestionList extends React.Component<Props, State> {
     if (isFetching) {
       return <div className={c.container}>Retrieving question list...</div>;
     }
+    if (!activeQuestions) return (
+      <div className={c.container}>
+        <i className="material-icons">sentiment_very_dissatisfied</i>
+        A problem occured while retriving your question list...
+      </div>
+    )
     if (activeQuestions.length == 0) {
       return (
         <div className={c.container}>Add a new question...</div>
@@ -59,7 +77,7 @@ class QuestionList extends React.Component<Props, State> {
       <div className={c.container}>
         {activeQuestions.map((q, i) => {
           return (
-            <Question question={q.title} key={i}>
+            <Question question={q.title} key={i} deleteQuestion={() => this.handleDelete(q)}>
               <AnswerScale 
                 selected={isEditing ? this.state.updatedAnswers[q.id] : q.answer}
                 onSelect={v => this.updateAnswer(q.id, v)}
@@ -93,5 +111,6 @@ const styles = {
 export default compose(
   injectSheet(styles),
   withActiveQuestions,
-  withSubmitAnswers
+  withSubmitAnswers,
+  withDeleteQuestion
 )(QuestionList);

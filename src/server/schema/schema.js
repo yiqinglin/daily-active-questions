@@ -31,6 +31,7 @@ type Mutation {
   login: User
   answer(answers: JSON): Boolean
   addQuestion(question: String): Boolean
+  deleteQuestion(qid: String): Boolean
 }
 
 # we need to tell the server which types represent the root query

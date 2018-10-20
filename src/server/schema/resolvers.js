@@ -47,10 +47,12 @@ export default {
         Object.keys(answers).map((qid) => {
           // Insert the answer value to res using questionId.
           const targetIndex = res.findIndex(item => item.id === qid);
-          res.splice(targetIndex, 1, {
-            ...res[targetIndex],
-            answer: answers[qid]
-          })
+          if (targetIndex > -1) {
+            res.splice(targetIndex, 1, {
+              ...res[targetIndex],
+              answer: answers[qid]
+            })
+          }
         });
       });
 
@@ -101,6 +103,18 @@ export default {
           id: docRef.id
         });
 
+      return;
+    },
+    async deleteQuestion(obj, args, context) {
+      const { user } = context;
+      const { qid } = args;
+  
+      if (!user) {
+        throw Error('Log in is required.');
+      }
+  
+      await app.db.collection('questions').doc(qid).set({active: -1}, {merge: true});
+  
       return;
     }
   },

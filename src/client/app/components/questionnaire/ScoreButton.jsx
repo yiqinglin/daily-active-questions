@@ -28,13 +28,21 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    cursor: 'pointer'
+    cursor: 'pointer',
+    transition: 'background-color, .12s ease-in-out',
+    '&:hover': {
+      backgroundColor: 'rgba(255, 192, 203, .3)',
+      border: 'rgba(255, 192, 203, .3)',
+      color: 'white'
+    }
   },
   score: {
     fontSize: '11px'
   },
   selected: {
-    color: 'pink'
+    backgroundColor: 'rgba(255, 192, 203, 1)',
+    border: 'rgba(255, 192, 203, 1)',
+    color: 'white'
   }
 };
 
