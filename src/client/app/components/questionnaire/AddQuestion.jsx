@@ -1,13 +1,15 @@
 // @flow
 import React from 'react';
 import injectSheet from 'react-jss'
+import { compose } from 'react-apollo';
 import AnswerScale from './AnswerScale';
 import Modal from '../Modal';
 import TextField from '../TextField';
-import { renderToStringWithData } from 'react-apollo';
+import withAddQuestion from 'app/composers/mutations/withAddQuestion';
 
 type Props = {
   classes: Object,
+  addQuestion: Function
 }
 type State = {
   isAdding: boolean,
@@ -21,7 +23,13 @@ class AddQuestion extends React.Component<Props, State> {
   }
 
   onSubmit = () => {
-    alert(`submitting question: ${this.state.questionDraft}`);
+    const { questionDraft: question } = this.state;
+
+    if (question) {
+      this.props.addQuestion(question)
+        .then(() => this.setState({ isAdding: false }))
+        .catch(e => console.log(e))
+    }
   }
 
   render() {
@@ -35,7 +43,7 @@ class AddQuestion extends React.Component<Props, State> {
           value={this.state.questionDraft}
           onChange={s => this.setState({ questionDraft: s })}
         />
-        <button onClick={this.onSubmit}>Submit</button>
+        <button onClick={this.onSubmit} disabled={!this.state.questionDraft}>Submit</button>
       </Modal>
     );
     const BtnView = !this.state.isAdding && (
@@ -57,4 +65,7 @@ const styles = {
   }
 };
 
-export default injectSheet(styles)(AddQuestion);
+export default compose(
+  withAddQuestion,
+  injectSheet(styles)
+)(AddQuestion);
