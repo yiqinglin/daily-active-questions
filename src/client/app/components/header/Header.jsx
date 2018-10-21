@@ -10,7 +10,10 @@ type Props = {
 const Header = ({ classes: c }: Props) => (
   <div className={c.header}>
     <Avatar />
-    Profile
+    <div>
+      Profile
+      <a href="/logout">Logout</a>
+    </div>
   </div>
 );
 
