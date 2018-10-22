@@ -6,15 +6,16 @@ type Props = {
   classes: Object,
   question: String,
   children: Node,
-  deleteQuestion: Function
+  deleteQuestion: Function,
+  editQuestion: Function
 }
 
-const Question = ({ classes: c, question, children, deleteQuestion }: Props) => (
+const Question = ({ classes: c, question, children, deleteQuestion, editQuestion}: Props) => (
   <div className={c.container}>
     <div className={c.qLine}>
       <h4>{question}</h4>
       <div className={c.actions}>
-        <i className="material-icons">edit</i>
+        <i className="material-icons" onClick={editQuestion}>edit</i>
         <i className="material-icons" onClick={deleteQuestion}>delete</i>
       </div>
     </div>

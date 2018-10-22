@@ -16,7 +16,6 @@ const App = ({ classes: c }: Props) => (
   <div className={c.container}>
     <Header />
     <Home />
-    <a href="/auth/google">Sign In with Google</a>
   </div>
 );
 

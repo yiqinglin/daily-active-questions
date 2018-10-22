@@ -4,57 +4,19 @@ import { graphql, compose } from 'react-apollo';
 import injectSheet from 'react-jss';
 import gql from 'graphql-tag';
 import QuestionList from 'app/components/questionnaire/QuestionList';
+import withUser from 'app/composers/queries/withUser';
 
 type Props = {
-  classes: Object
+  classes: Object,
+  user: Object
 }
 
-const Home = ({ classes: c }: Props) => (
+const Home = ({ classes: c, user }: Props) => (
   <div className={c.container}>
     <h3 className={c.headline}>Did I do my best...</h3>
-    <QuestionList />
+    {user ? <QuestionList /> : <div>Log in with your Google account and start</div>}
   </div>
 );
-
-/**
- * Query Data
- */
-// const QUERY = gql`
-//   query getUsers {
-//     users {
-//       _id,
-//       username
-//     }
-//   }
-// `;
-// const mapDataToProps = result => ({
-//   users: result.data.users,
-//   isFetching: result.data.loading
-// });
-// const withData = graphql(QUERY, {
-//   props: mapDataToProps
-// });
-
-/**
- * Query Actions
- */
-// const ACTIONS = gql`
-//   mutation addUser($username: String!) {
-//     addUser(username: $username) {
-//       _id,
-//       username
-//     }
-//   }
-// `;
-// const mapActionsToProps = ({ mutate }) => ({
-//   addUser: username => mutate({
-//     variables: { username },
-//     refetchQueries: ['getUsers']
-//   })
-// });
-// const withActions = graphql(ACTIONS, {
-//   props: mapActionsToProps
-// });
 
 const styles = {
   container: {
@@ -68,5 +30,7 @@ const styles = {
   }
 };
 
-// export default compose(withData, withActions)(Home);
-export default injectSheet(styles)(Home);
+export default compose(
+  injectSheet(styles),
+  withUser
+)(Home);

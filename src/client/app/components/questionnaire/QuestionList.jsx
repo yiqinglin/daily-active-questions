@@ -5,31 +5,44 @@ import { compose } from 'react-apollo';
 import withActiveQuestions from 'app/composers/queries/withActiveQuestions';
 import withSubmitAnswers from 'app/composers/mutations/withSubmitAnswers';
 import withDeleteQuestion from 'app/composers/mutations/withDeleteQuestion';
+import withUpdateQuestion from 'app/composers/mutations/withUpdateQuestion';
 import Question from './Question';
 import AnswerScale from './AnswerScale';
 import AddQuestion from './AddQuestion';
+import EditQuestion from './EditQuestion';
 
 type Props = {
   classes: Object,
   activeQuestions: Array<Object>,
   answer: Function,
   deleteQuestion: Function,
+  updateQuestion: Function,
   isFetching: boolean
+}
+
+type QuestionType = {
+  title: string,
+  id: string
 }
 
 type State = {
   updatedAnswers: { [string]: number },
-  isEditing: boolean
+  isAnswering: boolean,
+  questionInEdit: QuestionType
 }
 
 class QuestionList extends React.Component<Props, State> {
   state = {
     updatedAnswers: {},
-    isEditing: false
+    isAnswering: false,
+    questionInEdit: {
+      title: '',
+      id: ''
+    }
   }
 
   updateAnswer = (questionId, value) => {
-    if (!this.state.isEditing) return;
+    if (!this.state.isAnswering) return;
 
     const { updatedAnswers } = this.state;
     updatedAnswers[questionId] = value;
@@ -41,7 +54,7 @@ class QuestionList extends React.Component<Props, State> {
     const { updatedAnswers } = this.state;
 
     this.props.answer(updatedAnswers)
-      .then(() => this.setState({ isEditing: false }))
+      .then(() => this.setState({ isAnswering: false }))
       .catch(() => console.log('problem!'));
   }
 
@@ -52,12 +65,23 @@ class QuestionList extends React.Component<Props, State> {
       .then(() => confirm('The question has been deleted'))
       .catch(() => alert('problem!'));
     }
-    
+  }
+
+  handleUpdate = (newQuestion) => {
+    const { questionInEdit: { id: qid }} = this.state;
+    const confirmed = confirm(`Please confirm you\'d like to update the question to be:\n${newQuestion}`);
+
+    if (confirmed) {
+      this.props.updateQuestion(newQuestion, qid)
+      .then(() => confirm('The question has been updated'))
+      .then(() => this.setState({ questionInEdit: { id: '', title: ''}}))
+      .catch(() => alert('problem!'));
+    }
   }
 
   render() {
     const { classes: c, activeQuestions, isFetching } = this.props;
-    const { isEditing } = this.state;
+    const { isAnswering, questionInEdit } = this.state;
 
     if (isFetching) {
       return <div className={c.container}>Retrieving question list...</div>;
@@ -77,9 +101,14 @@ class QuestionList extends React.Component<Props, State> {
       <div className={c.container}>
         {activeQuestions.map((q, i) => {
           return (
-            <Question question={q.title} key={i} deleteQuestion={() => this.handleDelete(q)}>
+            <Question
+              question={q.title}
+              key={i}
+              deleteQuestion={() => this.handleDelete(q)}
+              editQuestion={() => this.setState({ questionInEdit: { title: q.title, id: q.id } })}
+            >
               <AnswerScale 
-                selected={isEditing ? this.state.updatedAnswers[q.id] : q.answer}
+                selected={isAnswering ? this.state.updatedAnswers[q.id] : q.answer}
                 onSelect={v => this.updateAnswer(q.id, v)}
               />
             </Question>
@@ -88,16 +117,24 @@ class QuestionList extends React.Component<Props, State> {
         <AddQuestion />
         <div>
           <button onClick={() => this.setState({
-            isEditing: !isEditing,
+            isAnswering: !isAnswering,
             updatedAnswers: {}
           })}>
-            {isEditing ? 'Cancel' : 'Edit'}
+            {isAnswering ? 'Cancel' : 'Edit'}
           </button>
           <button
             onClick={this.onSubmit}
-            disabled={!isEditing}
+            disabled={!isAnswering}
           >Submit</button>
         </div>
+        {questionInEdit.id && 
+          <EditQuestion
+            question={questionInEdit.title}
+            qid={questionInEdit.id}
+            updateQuestion={newQuestion => this.handleUpdate(newQuestion)}
+            onClose={() => this.setState({ questionInEdit: { id: '', title: '' }})}
+          />
+        }
       </div>
     );
   }
@@ -112,5 +149,6 @@ export default compose(
   injectSheet(styles),
   withActiveQuestions,
   withSubmitAnswers,
+  withUpdateQuestion,
   withDeleteQuestion
 )(QuestionList);

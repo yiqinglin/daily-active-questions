@@ -24,7 +24,6 @@ const Modal = ({ classes: c, containerStyle, onClose, children }: Props) => (
   <div>
     <div className={c.backdrop} onClick={onClose} />
     <div className={c.container} style={containerStyle}>
-      This is a modal
       {children}
     </div>
   </div>

@@ -1,18 +1,22 @@
 // @flow
 import React from 'react';
 import injectSheet from 'react-jss'
+import { compose } from 'react-apollo';
+import withUser from 'app/composers/queries/withUser';
 import Avatar from './Avatar';
 
 type Props = {
-  classes: Object
+  classes: Object,
+  user: Object
 }
 
-const Header = ({ classes: c }: Props) => (
+const Header = ({ classes: c, user }: Props) => (
   <div className={c.header}>
     <Avatar />
     <div>
-      Profile
-      <a href="/logout">Logout</a>
+      {user ? 
+        <a href="/logout">Logout</a> : <a href="/auth/google">Sign In with Google</a>
+      }
     </div>
   </div>
 );
@@ -37,4 +41,7 @@ const styles = {
   }
 };
 
-export default injectSheet(styles)(Header);
+export default compose(
+  injectSheet(styles),
+  withUser
+)(Header);
