@@ -17,16 +17,30 @@ type Props = {
   theme: Object
 }
 type State = {
-  modalOpen: boolean
+  modalOpen: boolean,
+  writeMode: boolean,
+  isSubmitting: boolean
 }
 
 class Home extends React.Component<Props, State> {
   state = {
-    modalOpen: false
+    modalOpen: false,
+    writeMode: false,
+    isSubmitting: false
   }
   
   closeModal = () => {
     this.setState({ modalOpen: false })
+  }
+
+  onClickSubmit = () => {
+    if (!this.state.isSubmitting) {
+      this.setState({isSubmitting: true})
+    }
+  }
+
+  onFinishSubmit = () => {
+    this.setState({ isSubmitting: false, writeMode: false })
   }
 
   render() {
@@ -35,14 +49,26 @@ class Home extends React.Component<Props, State> {
 
     const PageFlags = (
       <div className={c.flags}>
-        <Flag icon="/img/answer.svg" custom hex={theme.colorPrimary} />
+        <Flag
+          icon="/img/answer.svg"
+          custom
+          hex={theme.colorPrimary}
+          onClick={() => this.setState({ writeMode: true })}
+          extendable
+          onConfirm={this.onClickSubmit}
+          onCancel={() => this.setState({ writeMode: false })}
+        />
         <Flag
           icon="add_circle"
           hex={theme.colorSecondary}
           styles={{ marginTop: '20px' }}
           onClick={() => this.setState({ modalOpen: true })}  
         />
-        <Flag icon="swap_vert" hex={theme.colorAccent} styles={{ marginTop: '20px' }}/>
+        <Flag
+          icon="swap_vert"
+          hex={theme.colorAccent}
+          styles={{ marginTop: '20px' }}
+        />
       </div>
     );
     const addQuestionModal = this.state.modalOpen &&
@@ -54,7 +80,12 @@ class Home extends React.Component<Props, State> {
     if (user) return (
       <div className={c.container}>
         <h3 className={c.headline}>Did I do my best...</h3>
-        <QuestionList />
+        <QuestionList
+          writeMode={this.state.writeMode}
+          onSwitchMode={() => this.setState({ writeMode: false })}
+          onSubmit={this.state.isSubmitting}
+          onFinishSubmit={this.onFinishSubmit}
+        />
         <div className={c.pageFlags}>
           {PageFlags}
         </div>
@@ -93,7 +124,7 @@ const styles = theme => ({
   },
   pageFlags: {
     position: 'absolute',
-    right: '-50px',
+    left: '100%',
     top: '0'
   },
   flags: {

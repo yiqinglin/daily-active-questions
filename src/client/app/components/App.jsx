@@ -4,7 +4,6 @@ import injectSheet, { ThemeProvider } from 'react-jss';
 import { compose } from 'react-apollo';
 import Home from 'app/components/Home';
 import withUser from 'app/composers/queries/withUser';
-import HomeActions from './HomeActions';
 
 type Props = {
   classes: Object,

@@ -25,14 +25,22 @@ const Question = ({ classes: c, question, children, deleteQuestion, editQuestion
 
 const styles = {
   container: {
-    marginBottom: '36px'
+    marginBottom: '36px',
+    overflow: 'hidden',
+    '&:hover $actions': {
+      right: '0',
+    }
   },
   qLine: {
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    position: 'relative'
   },
   actions: {
+    position: 'absolute',
+    right: '-50px',
+    transition: 'right .15s ease-in-out',
     '&> .material-icons': {
       fontSize: '16px',
       color: 'rgb1(84, 84, 81, 1)',

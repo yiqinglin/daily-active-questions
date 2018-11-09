@@ -1,12 +1,13 @@
 // @flow
 import React from 'react';
-import injectSheet from 'react-jss'
+import injectSheet, { withTheme } from 'react-jss'
 import { compose } from 'react-apollo';
 import Modal from '../Modal';
 import TextField from '../TextField';
 
 type Props = {
   classes: Object,
+  theme: Object,
   onClose: Function,
   updateQuestion: Function,
   question: string,
@@ -34,11 +35,15 @@ class EditQuestion extends React.Component<Props, State> {
   }
 
   render() {
-    const { classes: c, question, onClose } = this.props;
+    const { classes: c, question, onClose, theme } = this.props;
 
     return (
       <div className={c.container}>  
-        <Modal onClose={onClose}>
+        <Modal
+          onClose={onClose}
+          bgIcon="edit"
+          iconBgColor={theme.colorPrimary}
+        >
           <b>Did I do my best...</b>
           <TextField
             placeholder={question}
@@ -59,5 +64,6 @@ const styles = {
 };
 
 export default compose(
-  injectSheet(styles)
+  injectSheet(styles),
+  withTheme
 )(EditQuestion);

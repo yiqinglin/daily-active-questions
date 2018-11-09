@@ -16,7 +16,11 @@ type Props = {
   answer: Function,
   deleteQuestion: Function,
   updateQuestion: Function,
-  isFetching: boolean
+  onSwitchMode: Function,
+  onFinishSubmit: Function,
+  isFetching: boolean,
+  writeMode: boolean,
+  onSubmit: boolean
 }
 
 type QuestionType = {
@@ -26,22 +30,26 @@ type QuestionType = {
 
 type State = {
   updatedAnswers: { [string]: number },
-  isAnswering: boolean,
   questionInEdit: QuestionType
 }
 
 class QuestionList extends React.Component<Props, State> {
   state = {
     updatedAnswers: {},
-    isAnswering: false,
     questionInEdit: {
       title: '',
       id: ''
     }
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if (!prevProps.onSubmit && this.props.onSubmit) {
+      this.handleSubmit();
+    }
+  }
+
   updateAnswer = (questionId, value) => {
-    if (!this.state.isAnswering) return;
+    if (!this.props.writeMode) return;
 
     const { updatedAnswers } = this.state;
     updatedAnswers[questionId] = value;
@@ -49,11 +57,11 @@ class QuestionList extends React.Component<Props, State> {
     this.setState({updatedAnswers});
   }
 
-  onSubmit = () => {
+  handleSubmit = () => {
     const { updatedAnswers } = this.state;
 
     this.props.answer(updatedAnswers)
-      .then(() => this.setState({ isAnswering: false }))
+      .then(() => this.props.onFinishSubmit())
       .catch(() => console.log('problem!'));
   }
 
@@ -78,9 +86,14 @@ class QuestionList extends React.Component<Props, State> {
     }
   }
 
+  handleCancel = () => {
+    this.setState({updatedAnswers: {}});
+    this.props.onSwitchMode();
+  }
+
   render() {
-    const { classes: c, activeQuestions, isFetching } = this.props;
-    const { isAnswering, questionInEdit } = this.state;
+    const { classes: c, activeQuestions, isFetching, writeMode } = this.props;
+    const { questionInEdit } = this.state;
 
     if (isFetching) {
       return <div className={c.container}>Retrieving question list...</div>;
@@ -107,24 +120,21 @@ class QuestionList extends React.Component<Props, State> {
               editQuestion={() => this.setState({ questionInEdit: { title: q.title, id: q.id } })}
             >
               <AnswerScale 
-                selected={isAnswering ? this.state.updatedAnswers[q.id] : q.answer}
+                selected={writeMode ? this.state.updatedAnswers[q.id] : q.answer}
                 onSelect={v => this.updateAnswer(q.id, v)}
               />
             </Question>
           );
         })}
-        <div>
-          <button onClick={() => this.setState({
-            isAnswering: !isAnswering,
-            updatedAnswers: {}
-          })}>
-            {isAnswering ? 'Cancel' : 'Edit'}
+        {/* <div>
+          <button onClick={this.handleCancel}>
+            {writeMode ? 'Cancel' : 'Edit'}
           </button>
           <button
             onClick={this.onSubmit}
-            disabled={!isAnswering}
+            disabled={!writeMode}
           >Submit</button>
-        </div>
+        </div> */}
         {questionInEdit.id && 
           <EditQuestion
             question={questionInEdit.title}
