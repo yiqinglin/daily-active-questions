@@ -8,7 +8,6 @@ import withDeleteQuestion from 'app/composers/mutations/withDeleteQuestion';
 import withUpdateQuestion from 'app/composers/mutations/withUpdateQuestion';
 import Question from './Question';
 import AnswerScale from './AnswerScale';
-import AddQuestion from './AddQuestion';
 import EditQuestion from './EditQuestion';
 
 type Props = {
@@ -114,7 +113,6 @@ class QuestionList extends React.Component<Props, State> {
             </Question>
           );
         })}
-        <AddQuestion />
         <div>
           <button onClick={() => this.setState({
             isAnswering: !isAnswering,

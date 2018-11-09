@@ -14,36 +14,73 @@ const ScoreButton = ({ classes: c, score, onClick, isSelected }: Props) => (
   <div
     className={classeNames(c.container, isSelected && c.selected)}
     onClick={() => onClick(score)}
-  >
-    <span className={c.score}>{score.toString()}</span>
-  </div>
+  />
 );
 
-const styles = {
+const styles = theme => ({
   container: {
-    width: '30px',
-    height: '30px',
-    borderRadius: '30px',
-    border: '1px solid grey',
+    width: '20px',
+    height: '20px',
+    borderRadius: '20px',
+    border: '2px solid #A7A7A7',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     cursor: 'pointer',
     transition: 'background-color, .12s ease-in-out',
+    backgroundColor: 'transparent',
     '&:hover': {
-      backgroundColor: 'rgba(255, 192, 203, .3)',
-      border: 'rgba(255, 192, 203, .3)',
-      color: 'white'
+      backgroundColor: theme.colorPrimary,
+      borderColor: theme.colorPrimary,
+      color: 'white',
+      '&::before': {
+        content: '""',
+        width: '12px',
+        height: '12px',
+        borderRadius: '12px',
+        left: '2px',
+        top: '2px',
+        position: 'absolute',
+        backgroundColor: theme.colorPrimary
+      }
+    },
+    position: 'relative',
+    '&::after': {
+      content: (props) => {
+        if (props.score === 0) return '"not at all"';
+        if (props.score === 10) return '"Totally"';
+        return `'${props.score.toString()}'`;
+      },
+      position: 'absolute',
+      right: '0',
+      left: '-17px',
+      top: '-20px',
+      textAlign: 'center',
+      fontSize: '10px',
+      color: '#A7A7A7',
+      fontWeight: '100',
+      textTransform: 'capitalize',
+      width: '50px'
+    },
+    '&::before': {
+      content: '""',
+      width: '0',
+      height: '0',
+      borderRadius: '0',
+      left: '8px',
+      top: '8px',
+      position: 'absolute',
+      backgroundColor: theme.colorPrimary,
+      transition: 'all .1s ease-in-out'
     }
   },
   score: {
-    fontSize: '11px'
   },
   selected: {
-    backgroundColor: 'rgba(255, 192, 203, 1)',
-    border: 'rgba(255, 192, 203, 1)',
+    backgroundColor: theme.colorPrimary,
+    border: theme.colorPrimary,
     color: 'white'
   }
-};
+});
 
 export default injectSheet(styles)(ScoreButton);

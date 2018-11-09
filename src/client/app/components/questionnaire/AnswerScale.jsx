@@ -20,6 +20,7 @@ const AnswerScale = ({ classes: c, score, onSelect, selected }: Props) => (
         onClick={onSelect}
       />)
     }
+    <div className={c.bar}/>
   </div>
 );
 
@@ -27,7 +28,15 @@ const styles = {
   container: {
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'space-around'
+    justifyContent: 'space-around',
+    marginTop: '20px',
+    position: 'relative'
+  },
+  bar: {
+    position:'absolute',
+    width: '100%',
+    height: '10px',
+    backgroundColor: 'rgba(216,216,216,.2)'
   }
 };
 
