@@ -36,7 +36,8 @@ const styles = {
     position:'absolute',
     width: '100%',
     height: '10px',
-    backgroundColor: 'rgba(216,216,216,.2)'
+    backgroundColor: 'rgba(216,216,216,.2)',
+    pointerEvents: 'none'
   }
 };
 

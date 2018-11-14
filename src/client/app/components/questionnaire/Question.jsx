@@ -26,16 +26,16 @@ const Question = ({ classes: c, question, children, deleteQuestion, editQuestion
 const styles = {
   container: {
     marginBottom: '36px',
-    overflow: 'hidden',
-    '&:hover $actions': {
-      right: '0',
-    }
+    overflow: 'hidden'
   },
   qLine: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
-    position: 'relative'
+    position: 'relative',
+    '&:hover $actions': {
+      right: '0',
+    }
   },
   actions: {
     position: 'absolute',

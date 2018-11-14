@@ -30,7 +30,6 @@ const styles = theme => ({
     transition: 'background-color, .12s ease-in-out',
     backgroundColor: 'transparent',
     '&:hover': {
-      backgroundColor: theme.colorPrimary,
       borderColor: theme.colorPrimary,
       color: 'white',
       '&::before': {
@@ -61,25 +60,24 @@ const styles = theme => ({
       fontWeight: '100',
       textTransform: 'capitalize',
       width: '50px'
-    },
-    '&::before': {
-      content: '""',
-      width: '0',
-      height: '0',
-      borderRadius: '0',
-      left: '8px',
-      top: '8px',
-      position: 'absolute',
-      backgroundColor: theme.colorPrimary,
-      transition: 'all .1s ease-in-out'
     }
   },
   score: {
   },
   selected: {
-    backgroundColor: theme.colorPrimary,
-    border: theme.colorPrimary,
-    color: 'white'
+    backgroundColor: 'transparent',
+    color: 'white',
+    borderColor: theme.colorPrimary,
+    '&::before': {
+      content: '""',
+      width: '12px',
+      height: '12px',
+      borderRadius: '12px',
+      left: '2px',
+      top: '2px',
+      position: 'absolute',
+      backgroundColor: theme.colorPrimary
+    }
   }
 });
 

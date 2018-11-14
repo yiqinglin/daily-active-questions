@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import injectSheet from 'react-jss';
+import injectSheet, { withTheme } from 'react-jss';
 import { compose } from 'react-apollo';
 import withActiveQuestions from 'app/composers/queries/withActiveQuestions';
 import withSubmitAnswers from 'app/composers/mutations/withSubmitAnswers';
@@ -8,14 +8,16 @@ import withDeleteQuestion from 'app/composers/mutations/withDeleteQuestion';
 import withUpdateQuestion from 'app/composers/mutations/withUpdateQuestion';
 import Question from './Question';
 import AnswerScale from './AnswerScale';
-import EditQuestion from './EditQuestion';
+import AddQuestion from './AddQuestion';
+import Modal from '../Modal';
+import FlexButton from '../FlexButton';
 
 type Props = {
   classes: Object,
+  theme: Object,
   activeQuestions: Array<Object>,
   answer: Function,
   deleteQuestion: Function,
-  updateQuestion: Function,
   onSwitchMode: Function,
   onFinishSubmit: Function,
   isFetching: boolean,
@@ -30,12 +32,17 @@ type QuestionType = {
 
 type State = {
   updatedAnswers: { [string]: number },
-  questionInEdit: QuestionType
+  questionInEdit: QuestionType,
+  deleteConfirm: QuestionType
 }
 
 class QuestionList extends React.Component<Props, State> {
   state = {
     updatedAnswers: {},
+    deleteConfirm: {
+      title: '',
+      id: ''
+    },
     questionInEdit: {
       title: '',
       id: ''
@@ -65,25 +72,11 @@ class QuestionList extends React.Component<Props, State> {
       .catch(() => console.log('problem!'));
   }
 
-  handleDelete = (question) => {
-    const confirmed = confirm(`Please confirm you\'d like to stop tracking this question:\n${question.title}`);
-    if (confirmed) {
-      this.props.deleteQuestion(question.id)
+  handleDelete = () => {
+    this.props.deleteQuestion(this.state.deleteConfirm.id)
       .then(() => confirm('The question has been deleted'))
+      .then(() => this.setState({ deleteConfirm: { id: '', title: ''}}))
       .catch(() => alert('problem!'));
-    }
-  }
-
-  handleUpdate = (newQuestion) => {
-    const { questionInEdit: { id: qid }} = this.state;
-    const confirmed = confirm(`Please confirm you\'d like to update the question to be:\n${newQuestion}`);
-
-    if (confirmed) {
-      this.props.updateQuestion(newQuestion, qid)
-      .then(() => confirm('The question has been updated'))
-      .then(() => this.setState({ questionInEdit: { id: '', title: ''}}))
-      .catch(() => alert('problem!'));
-    }
   }
 
   handleCancel = () => {
@@ -92,8 +85,8 @@ class QuestionList extends React.Component<Props, State> {
   }
 
   render() {
-    const { classes: c, activeQuestions, isFetching, writeMode } = this.props;
-    const { questionInEdit } = this.state;
+    const { classes: c, activeQuestions, isFetching, writeMode, theme } = this.props;
+    const { questionInEdit, deleteConfirm } = this.state;
 
     if (isFetching) {
       return <div className={c.container}>Retrieving question list...</div>;
@@ -109,6 +102,34 @@ class QuestionList extends React.Component<Props, State> {
         <div className={c.container}>Add a new question...</div>
       )
     }
+
+    const DeleteModal = this.state.deleteConfirm.title && (
+      <Modal
+        onClose={() => this.setState({ deleteConfirm: { title: '', id: '' }})}
+        bgIcon="delete_outline"
+        iconBgColor={theme.colorPrimary}
+      >
+        <div className={c.modalContainer}>
+          <div className={c.content}>
+            <h3>Please confirm you'd like to DELETE this question</h3>
+            <b>{this.state.deleteConfirm.title}</b>
+          </div>
+          <div className={c.actionGroup}>
+            <FlexButton
+              theme="REJECT"
+              text="confirm"
+              onClick={this.handleDelete}
+            />
+            <FlexButton
+              theme="CANCEL"
+              text="cancel"
+              onClick={() => this.setState({ deleteConfirm: { title: '', id: '' }})}  
+            />
+          </div>
+        </div>
+      </Modal>
+    );
+
     return (
       <div className={c.container}>
         {activeQuestions.map((q, i) => {
@@ -116,8 +137,8 @@ class QuestionList extends React.Component<Props, State> {
             <Question
               question={q.title}
               key={i}
-              deleteQuestion={() => this.handleDelete(q)}
-              editQuestion={() => this.setState({ questionInEdit: { title: q.title, id: q.id } })}
+              deleteQuestion={() => this.setState({ deleteConfirm: { title: q.title, id: q.id }})}
+              editQuestion={() => this.setState({ questionInEdit: { title: q.title, id: q.id }})}
             >
               <AnswerScale 
                 selected={writeMode ? this.state.updatedAnswers[q.id] : q.answer}
@@ -126,37 +147,48 @@ class QuestionList extends React.Component<Props, State> {
             </Question>
           );
         })}
-        {/* <div>
-          <button onClick={this.handleCancel}>
-            {writeMode ? 'Cancel' : 'Edit'}
-          </button>
-          <button
-            onClick={this.onSubmit}
-            disabled={!writeMode}
-          >Submit</button>
-        </div> */}
-        {questionInEdit.id && 
-          <EditQuestion
-            question={questionInEdit.title}
-            qid={questionInEdit.id}
-            updateQuestion={newQuestion => this.handleUpdate(newQuestion)}
+        {questionInEdit.id &&
+          <AddQuestion
+            question={questionInEdit}
             onClose={() => this.setState({ questionInEdit: { id: '', title: '' }})}
+            onSuccess={() => this.setState({ questionInEdit: { id: '', title: '' }})}
           />
         }
+        {DeleteModal}
       </div>
     );
   }
 }
 
 const styles = {
-  container: {
+  modalContainer: {
+    position: 'relative',
+    width: '100%',
+    height: '100%',
+    zIndex: '5',
+    padding: '20px',
+    display: 'flex',
+    alignItems: 'center'
+  },
+  content: {
+    marginTop: '-40px'
+  },
+  actionGroup: {
+    position: 'absolute',
+    bottom: '0',
+    width: '100%',
+    height: '50px',
+    display: 'flex',
+    left: '0',
+    alignItems: 'center',
+    justifyContent: 'space-around'
   }
 };
 
 export default compose(
   injectSheet(styles),
+  withTheme,
   withActiveQuestions,
   withSubmitAnswers,
-  withUpdateQuestion,
   withDeleteQuestion
 )(QuestionList);

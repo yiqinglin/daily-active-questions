@@ -12,6 +12,7 @@
 // @flow
 import React from 'react';
 import injectSheet from 'react-jss'
+import FlexButton from './FlexButton';
 
 type Props = {
   classes: Object,
@@ -39,14 +40,17 @@ const styles = {
     right: '0',
     top: '0',
     bottom: '0',
-    backgroundColor: 'rgba(0,0,0,0.35)'
+    backgroundColor: 'rgba(0,0,0,0.35)',
+    zIndex: '5'
   },
   container: {
-    position: 'absolute',
+    zIndex: '10',
+    position: 'fixed',
     margin: 'auto',
     left: '0',
     right: '0',
     top: '0',
+    bottom: '0',
     width: '500px',
     height: '300px',
     backgroundColor: 'white',
