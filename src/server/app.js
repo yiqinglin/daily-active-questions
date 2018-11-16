@@ -10,7 +10,7 @@ import firebaseAdmin from 'firebase-admin';
 import passport from 'passport';
 import { graphqlExpress, graphiqlExpress } from 'graphql-server-express';
 import settings from 'settings';
-import schema from 'schema';
+import schema from '~/graphql';
 
 // Initialize firebase db.
 const serviceAccount = require('../../daily-active-questions-firebase-adminsdk-qrgh4-b8674391d6.json');
@@ -54,7 +54,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 /**
- * GraphQL
+ * ./
  */
 
 app.use('/graphql', bodyParser.json(), graphqlExpress(req =>({
