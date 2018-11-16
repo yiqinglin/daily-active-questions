@@ -59,6 +59,7 @@ class QuestionList extends React.Component<Props, State> {
     if (!this.props.writeMode) return;
 
     const { updatedAnswers } = this.state;
+    
     updatedAnswers[questionId] = value;
 
     this.setState({updatedAnswers});
@@ -67,7 +68,10 @@ class QuestionList extends React.Component<Props, State> {
   handleSubmit = () => {
     const { updatedAnswers } = this.state;
 
-    this.props.answer(updatedAnswers)
+    // Get current date (UTC) in millieseconds.      
+    const timestamp = new Date().getTime();
+
+    this.props.answer(updatedAnswers, timestamp)
       .then(() => this.props.onFinishSubmit())
       .catch(() => console.log('problem!'));
   }

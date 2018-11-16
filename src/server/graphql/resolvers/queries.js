@@ -6,6 +6,28 @@ export default {
 
     return user;
   },
+  async dailyAverage(obj, args, context) {
+    const { user } = context;
+    
+    if (!user) {
+      throw Error('Log in is required.');
+    }
+
+    const { scale } = args;
+
+    // // By default we fetch the answers for the current month.
+    // if (!scale) {
+
+    // }
+
+    // Get all answers submitted by this user this month.
+    const answerRef = await app.db
+      .collection('answers')
+      .where('userId', '==', user.id)
+      .get();
+
+
+  },
   async activeQuestions(obj, args, context) {
     const { user } = context;
     
@@ -55,5 +77,5 @@ export default {
     });
 
     return res;
-  }
+  },
 }

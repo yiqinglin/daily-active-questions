@@ -2,10 +2,7 @@ import * as app from '~/app';
 
 export default async function answer(obj, args, context) {
   const { user } = context;
-  const { answers } = args;
-
-  // Get current date in millieseconds.      
-  const timestamp = new Date().getTime();
+  const { answers, timestamp } = args;
 
   if (!user) {
     throw Error('Log in is required.');
