@@ -22,20 +22,20 @@ type User {
 
 # Daily average scores across all questions
 type DailyAverage {
-  value: Float,
-  timestamp: Float
+  value: String,
+  timestamp: String
 }
 
 # the schema allows the following query:
 type Query {
   user: User
-  activeQuestions: [Question]
-  dailyAverage: [DailyAverage]
+  activeQuestions(todayIs: String): [Question]
+  dailyAverage(timeframe: String): [DailyAverage]
 }
 
 # this schema allows the following mutation:
 type Mutation {
-  answer(answers: JSON, timestamp: Float): Boolean
+  answer(answers: JSON, timestamp: String): Boolean
   addQuestion(question: String): Boolean
   deleteQuestion(qid: String): Boolean
   updateQuestion(question: String, qid: String): Boolean

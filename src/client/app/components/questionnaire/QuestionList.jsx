@@ -6,6 +6,7 @@ import withActiveQuestions from 'app/composers/queries/withActiveQuestions';
 import withSubmitAnswers from 'app/composers/mutations/withSubmitAnswers';
 import withDeleteQuestion from 'app/composers/mutations/withDeleteQuestion';
 import withUpdateQuestion from 'app/composers/mutations/withUpdateQuestion';
+import { getCurrentTime } from 'app/lib/helpers';
 import Question from './Question';
 import AnswerScale from './AnswerScale';
 import AddQuestion from './AddQuestion';
@@ -68,8 +69,8 @@ class QuestionList extends React.Component<Props, State> {
   handleSubmit = () => {
     const { updatedAnswers } = this.state;
 
-    // Get current date (UTC) in millieseconds.      
-    const timestamp = new Date().getTime();
+    // Get client's time in string.      
+    const timestamp = getCurrentTime();
 
     this.props.answer(updatedAnswers, timestamp)
       .then(() => this.props.onFinishSubmit())

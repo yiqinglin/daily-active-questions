@@ -1,4 +1,6 @@
 import * as app from '~/app';
+import moment from 'moment';
+import { getAverage } from '~/lib/helpers';
 
 export default {
   user(obj, args, context) {
@@ -13,20 +15,29 @@ export default {
       throw Error('Log in is required.');
     }
 
-    const { scale } = args;
+    const { timeframe } = args;
 
-    // // By default we fetch the answers for the current month.
-    // if (!scale) {
+    const startOfMonth = moment.parseZone(timeframe).startOf('month').format();
+    const endOfMonth = moment.parseZone(timeframe).endOf('month').format();
+    const res = [];
 
-    // }
-
-    // Get all answers submitted by this user this month.
-    const answerRef = await app.db
+    const ansRef = await app.db
       .collection('answers')
       .where('userId', '==', user.id)
+      .where('timestamp', '>=', startOfMonth)
+      .where('timestamp', '<=', endOfMonth)
       .get();
 
+    ansRef.forEach(snapshot => {
+      const dailyAnswers = snapshot.data();
 
+      res.push({
+        timestamp: dailyAnswers.timestamp,
+        value: getAverage(dailyAnswers.values)
+      });
+    });
+
+    return res;
   },
   async activeQuestions(obj, args, context) {
     const { user } = context;
@@ -35,11 +46,9 @@ export default {
       throw Error('Log in is required.');
     }
 
-    // Get current date in millieseconds.      
-    const nowTime = new Date();
+    const { todayIs } = args;
+    const startOfToday = moment.parseZone(todayIs).startOf('day').format();
 
-    nowTime.setHours(0, 0, 0, 0);
-    const todayBeginsAt = nowTime.getTime();
     const promises = [];
     const res = [];
     const questionIds = [];
@@ -55,7 +64,7 @@ export default {
     const ansRef = await app.db
       .collection('answers')
       .where('userId', '==', user.id)
-      .where('timestamp', '>=', todayBeginsAt)
+      .where('timestamp', '>=', startOfToday)
       .get();
 
     quesRef.forEach(snapshot => {
