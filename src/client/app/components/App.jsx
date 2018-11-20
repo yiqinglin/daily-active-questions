@@ -2,8 +2,13 @@
 import React from 'react';
 import injectSheet, { ThemeProvider } from 'react-jss';
 import { compose } from 'react-apollo';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Home from 'app/components/Home';
+import HomeActions from 'app/components/HomeActions';
+import Login from 'app/components/Login';
+import Dashboard from 'app/components/dashboard/Dashboard';
 import withUser from 'app/composers/queries/withUser';
+import PrivateRoute from './PrivateRoute';
 
 type Props = {
   classes: Object,
@@ -22,10 +27,17 @@ const theme = {
 
 const App = ({ classes: c }: Props) => (
   <ThemeProvider theme={theme}>
-    <div className={c.container}>
-      <div className={c.titlePiece}>Daily Active Questions</div>
-      <Home />
-    </div>
+    <Router>
+      <div className={c.container}>
+        <div className={c.titlePiece}>Daily Active Questions</div>
+        <Switch>
+          <Route path="/login" component={Login} />
+          <PrivateRoute path="/dashboard" component={Dashboard} />
+          <PrivateRoute path="/" component={Home} />
+        </Switch>
+        <PrivateRoute path="/" component={HomeActions} />
+      </div>
+    </Router>
   </ThemeProvider>
 );
 

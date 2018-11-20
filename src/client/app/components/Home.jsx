@@ -5,15 +5,11 @@ import injectSheet, { withTheme } from 'react-jss';
 import gql from 'graphql-tag';
 import QuestionList from 'app/components/questionnaire/QuestionList';
 import AddQuestion from 'app/components/questionnaire/AddQuestion';
-import withUser from 'app/composers/queries/withUser';
 import Button from 'app/components/Button';
 import Flag from './Flag';
-import HomeActions from './HomeActions';
 
 type Props = {
   classes: Object,
-  user: Object,
-  isFetching: boolean,
   theme: Object
 }
 type State = {
@@ -44,8 +40,7 @@ class Home extends React.Component<Props, State> {
   }
 
   render() {
-    const { classes: c, user, isFetching, theme } = this.props;
-    if (isFetching) return (<div>Checking...</div>);
+    const { classes: c, theme } = this.props;
 
     const PageFlags = (
       <div className={c.flags}>
@@ -77,7 +72,7 @@ class Home extends React.Component<Props, State> {
         onClose={() => this.closeModal()}
       />;
   
-    if (user) return (
+    return (
       <div className={c.container}>
         <h3 className={c.headline}>Did I do my best...</h3>
         <QuestionList
@@ -90,23 +85,6 @@ class Home extends React.Component<Props, State> {
           {PageFlags}
         </div>
         {addQuestionModal}
-        <HomeActions />
-      </div>
-    );
-  
-    return (
-      <div className={c.login}>
-        <Button
-          onClick={() => window.location="/auth/google"}
-          text="Log in with google"
-          styles={{ width: '280px', marginBottom: '20px' }}
-          imgSrc="/img/new-google-favicon-512.png"
-        />
-        <Button
-          onClick={() => console.log('About this app.')}
-          text="About this app"
-          styles={{ width: '280px' }}
-        />
       </div>
     );
   }
@@ -129,12 +107,6 @@ const styles = theme => ({
   },
   flags: {
     marginTop: '120px'
-  },
-  login: {
-    width: '300px',
-    minHeight: '300px',
-    padding: '18px',
-    marginTop: '80px'
   },
   headline: {
     marginBottom: '36px',
@@ -162,6 +134,5 @@ const styles = theme => ({
 
 export default compose(
   injectSheet(styles),
-  withTheme,
-  withUser
+  withTheme
 )(Home);
