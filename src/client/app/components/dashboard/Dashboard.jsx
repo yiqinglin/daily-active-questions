@@ -1,6 +1,7 @@
 // @flow
 import React from 'react';
 import injectSheet from 'react-jss';
+import Calendar from 'app/components/calendar/Calendar';
 
 type Props = {
   classes: Object
@@ -9,6 +10,7 @@ type Props = {
 const Dashboard = ({ classes: c }: Props) => (
   <div className={c.container}>
     Visualization Town!
+    <Calendar />
   </div>
 );
 

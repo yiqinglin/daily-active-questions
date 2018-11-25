@@ -28,6 +28,9 @@ p, h4, h5 {
     font-weight: 300;
 }
 
+#app {
+    min-width: 750px;
+}
 
 .quote {
     font-family: 'Playfair Display', serif;

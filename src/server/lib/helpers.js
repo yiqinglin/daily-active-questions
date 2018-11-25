@@ -12,4 +12,5 @@ function getAverage(obj){
   }
 }
 
+
 export { getAverage };
