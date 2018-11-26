@@ -2,7 +2,8 @@
 import React from 'react';
 import injectSheet from 'react-jss';
 import moment from 'moment';
-import { getPrevMonthDays, getMonthDays } from 'app/lib/helpers';
+import { getDaysInCurrentMonthGrid, getPrevMonthDays, getMonthDays } from 'app/lib/helpers';
+import Day from './Monthly/Day';
 
 type Props = {
   classes: Object,
@@ -27,17 +28,16 @@ class MonthView extends React.Component<Props, State> {
 
   render() {
     const { classes: c, today } = this.props;
-    const { selectedDay } = this.state;
-    const monthStartAt = moment.parseZone(today).startOf('month').day();
-    const monthEndAt = moment.parseZone(today).endOf('month').day();
-    const endOfMonth = moment.parseZone(today).endOf('month').date();
-    const endOfPrevMonth = moment.parseZone(today).add(-1, 'month').endOf('month').date();
-    const days = [...getPrevMonthDays(endOfPrevMonth, monthStartAt),
-      ...getMonthDays(endOfMonth), ...getMonthDays(6 - monthEndAt)];
+    const { selectedDay } = this.state;    
+    const thisMonthGrid = getDaysInCurrentMonthGrid(today);
+    // The center of the array will always be the active month we are looking for.
+    const activeMonth = thisMonthGrid[Math.round((thisMonthGrid.length - 1) / 2)];
 
     return (
       <div className={c.container}>
-        {days.map((day, i) => <i key={i}>{day}</i>)}
+        {thisMonthGrid.map((date, i) => 
+          <Day date={date} key={i} activeMonth={activeMonth}/>
+        )}
       </div>
     );
   }
@@ -45,8 +45,8 @@ class MonthView extends React.Component<Props, State> {
 
 const styles = {
   container: {
-    fontSize: '30px',
-    color: 'green'
+    display: 'flex',
+    flexWrap: 'wrap'
   }
 };
 
