@@ -1,8 +1,7 @@
 // @flow
 import React from 'react';
-import { graphql, compose } from 'react-apollo';
+import { compose } from 'react-apollo';
 import injectSheet, { withTheme } from 'react-jss';
-import gql from 'graphql-tag';
 import QuestionList from 'app/components/questionnaire/QuestionList';
 import AddQuestion from 'app/components/questionnaire/AddQuestion';
 import Button from 'app/components/Button';

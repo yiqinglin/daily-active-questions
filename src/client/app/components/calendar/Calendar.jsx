@@ -37,13 +37,12 @@ class Calendar extends React.Component<Props, State> {
 
     return (
       <div className={c.container}>
-        Calendar!
         <Navigation
           today={currentTime}
           onClickNext={this.onClickNavNext}
           onClickPrev={this.onClickNavPrev}
         />
-        <MonthView today={currentTime}/>  
+        <MonthView today={currentTime} />  
       </div>
     );    
   }

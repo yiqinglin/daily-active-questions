@@ -9,7 +9,6 @@ type Props = {
 
 const Dashboard = ({ classes: c }: Props) => (
   <div className={c.container}>
-    Visualization Town!
     <Calendar />
   </div>
 );
