@@ -1,11 +1,11 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import injectSheet from 'react-jss'
 
 type Props = {
   classes: Object,
   question: String,
-  children: Node,
+  children: React.Node,
   deleteQuestion: Function,
   editQuestion: Function
 }

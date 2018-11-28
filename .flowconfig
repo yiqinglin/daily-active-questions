@@ -1,8 +1,7 @@
 [ignore]
-
 <PROJECT_ROOT>/public/.*
 .*/node_modules/json/test/.*
-<PROJECT_ROOT>/.*/node_modules/bcryptjs/src/bower.json
+.*/node_modules/protobufjs/src/bower.json
 
 [include]
 <PROJECT_ROOT>/src/client/.*

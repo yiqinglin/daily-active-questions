@@ -50,9 +50,13 @@ class AddQuestion extends React.Component<Props, State> {
   }
 
   handleAddQuestion = (newQuestion) => {
-    this.props.updateQuestion(newQuestion, this.props.question.id)
+    const { question } = this.props;
+
+    if (question && question.id) {
+      this.props.updateQuestion(newQuestion, question.id)
       .then(() => this.props.onSuccess())
       .catch(e => console.log(e))
+    }
   }
 
   handleUpdateQuestion = (newQuestion) => {

@@ -1,5 +1,6 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
+import { compose } from 'react-apollo';
 import injectSheet, { withTheme } from 'react-jss';
 import classname from 'classnames';
 import moment from 'moment';
@@ -8,7 +9,7 @@ type Props = {
   classes: Object,
   date: string,
   activeMonth: string,
-  children: Node
+  children: React.Node
 }
 const Day = ({ classes: c, date, activeMonth, children }: Props) => {
   const isWeekend = (date) => {
@@ -25,7 +26,9 @@ const Day = ({ classes: c, date, activeMonth, children }: Props) => {
       <div className={classname(c.date, isWeekend(date) && c.weekend, isNeighboringMonth(date) && c.neighborMonth)}>
         {moment.parseZone(date).date()}
       </div>
-      {children}
+      <div>
+        {children}
+      </div>
     </div>
   );
 }
@@ -58,4 +61,7 @@ const styles = theme => ({
   }
 });
 
-export default withTheme(injectSheet(styles)(Day));
+export default compose(
+  withTheme,
+  injectSheet(styles)
+)(Day);

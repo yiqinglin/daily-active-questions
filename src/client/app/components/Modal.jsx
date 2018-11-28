@@ -10,13 +10,13 @@
  * component will happen thereafter.
  */
 // @flow
-import React from 'react';
+import * as React from 'react';
 import injectSheet from 'react-jss'
 import FlexButton from './FlexButton';
 
 type Props = {
   classes: Object,
-  children: Node,
+  children: React.Node,
   onClose: () => void,
   bgIcon: String,
   iconBgColor: String,
@@ -28,7 +28,9 @@ const Modal = ({ classes: c, containerStyle, onClose, children, bgIcon, iconBgCo
     <div className={c.backdrop} onClick={onClose} />
     <div className={c.container} style={containerStyle}>
       {children}
-      <div className={c.decoIcon} style={{ backgroundColor: iconBgColor }}><i className="material-icons">{bgIcon}</i></div>
+      <div className={c.decoIcon} style={{ backgroundColor: iconBgColor }}>
+        <i className="material-icons">{bgIcon}</i>
+      </div>
     </div>
   </div>
 );
