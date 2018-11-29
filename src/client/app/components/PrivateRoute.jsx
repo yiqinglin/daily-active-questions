@@ -5,7 +5,6 @@ import withUser from 'app/composers/queries/withUser';
 
 function PrivateRoute({ component: Component, isFetching, user, ...rest }) {
   if (isFetching) return (<div>Checking...</div>);  
-
   return (
     <Route
       {...rest}

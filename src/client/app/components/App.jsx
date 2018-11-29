@@ -32,7 +32,7 @@ const App = ({ classes: c }: Props) => (
         <div className={c.titlePiece}>Daily Active Questions</div>
         <Switch>
           <Route path="/login" component={Login} />
-          <PrivateRoute path="/dashboard" component={Dashboard} />
+          <PrivateRoute path="/dashboard/:mode?/:year?/:month?/:day?" component={Dashboard} />
           <PrivateRoute path="/" component={Home} />
         </Switch>
         <PrivateRoute path="/" component={HomeActions} />

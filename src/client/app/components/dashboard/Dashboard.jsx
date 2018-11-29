@@ -1,17 +1,32 @@
 // @flow
 import React from 'react';
 import injectSheet from 'react-jss';
+import moment from 'moment';
 import Calendar from 'app/components/calendar/Calendar';
 
-type Props = {
-  classes: Object
+type URLParams = {
+  mode: 'monthly' | 'details',
+  day: string,
+  month: string,
+  year: string
 }
 
-const Dashboard = ({ classes: c }: Props) => (
-  <div className={c.container}>
-    <Calendar />
-  </div>
-);
+type Props = {
+  classes: Object,
+  match: {
+    params: URLParams
+  }
+}
+
+const Dashboard = ({ classes: c, match }: Props) => {
+  const { mode, day, month, year } = match.params;
+
+  return (
+    <div className={c.container}>
+      <Calendar activeDate={mode && moment(`${year}-${month}`, "YYYY-MM").format()} />
+    </div>
+  );
+}
 
 const styles = {
   container: {

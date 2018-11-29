@@ -1,30 +1,52 @@
 // @flow
 import React from 'react';
+import { compose } from 'react-apollo';
 import injectSheet from 'react-jss';
 import cx from 'classnames';
 import moment from 'moment';
+import { withRouter } from 'react-router-dom';
 
 type Props = {
   classes: Object,
-  today: string,
-  onClickNext: Function,
-  onClickPrev: Function
+  activeDate: string,
+  history: Object
 }
 
-const Navigation = ({ classes: c, today, onClickNext, onClickPrev }: Props) => (
-  <div className={c.container}>
-    <div className={c.arrowBtn} onClick={onClickPrev}>
-      <i className="material-icons">chevron_left</i>
+const Navigation = ({ classes: c, activeDate, history, onClickNext, onClickPrev }: Props) => {
+  const activeMonth = parseInt(moment.parseZone(activeDate).format("MM"));
+  const activeYear = parseInt(moment.parseZone(activeDate).format("YYYY"));
+  const getYearMonth = (direction: string) => {
+    switch (direction) {
+      case 'prev':
+        if (activeMonth === 1) {
+          return `${activeYear - 1}/12`;
+        } else {
+          return `${activeYear}/${activeMonth - 1}`;
+        }
+      case 'next':
+        if (activeMonth === 12) {
+          return `${activeYear + 1}/1`;
+        } else {
+          return `${activeYear}/${activeMonth + 1}`;
+        }
+      default:
+        return '';
+    }
+  }
+  return (
+    <div className={c.container}>
+      <div className={c.arrowBtn} onClick={() => history.push(`/dashboard/monthly/${getYearMonth('prev')}`)}>
+        <i className="material-icons">chevron_left</i>
+      </div>
+      <div>
+        {moment.parseZone(activeDate).format("MMMM YYYY")}
+      </div>
+      <div className={c.arrowBtn} onClick={() => history.push(`/dashboard/monthly/${getYearMonth('next')}`)}>
+        <i className="material-icons">chevron_right</i>
+      </div>
     </div>
-    <div>
-      {moment.parseZone(today).format("MMMM YYYY")}
-    </div>
-    <div className={c.arrowBtn} onClick={onClickNext}>
-      <i className="material-icons">chevron_right</i>
-    </div>
-  </div>
-)
-
+  );  
+}
 const styles = {
   container: {
     display: 'flex',
@@ -47,4 +69,7 @@ const styles = {
   }
 };
 
-export default injectSheet(styles)(Navigation);
+export default compose(
+  injectSheet(styles),
+  withRouter
+)(Navigation);
