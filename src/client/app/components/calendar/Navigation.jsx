@@ -33,6 +33,11 @@ const Navigation = ({ classes: c, activeDate, history, onClickNext, onClickPrev 
         return '';
     }
   }
+  const isCurrentMonth = () => moment.parseZone(activeDate).isSame(moment(), 'month');
+  const onClickNextMonth = () => {
+    if (!isCurrentMonth()) { history.push(`/dashboard/monthly/${getYearMonth('next')}`)};
+  };
+
   return (
     <div className={c.container}>
       <div className={c.arrowBtn} onClick={() => history.push(`/dashboard/monthly/${getYearMonth('prev')}`)}>
@@ -41,7 +46,7 @@ const Navigation = ({ classes: c, activeDate, history, onClickNext, onClickPrev 
       <div>
         {moment.parseZone(activeDate).format("MMMM YYYY")}
       </div>
-      <div className={c.arrowBtn} onClick={() => history.push(`/dashboard/monthly/${getYearMonth('next')}`)}>
+      <div className={cx(c.arrowBtn, isCurrentMonth() && c.disabled)} onClick={() => onClickNextMonth()}>
         <i className="material-icons">chevron_right</i>
       </div>
     </div>
@@ -66,6 +71,14 @@ const styles = {
     alignItems: 'center',
     height: '100%',
     width: '50px'
+  },
+  disabled: {
+    cursor: 'not-allowed',
+    color: '#ddd',
+    '&:hover': {
+      color: '#ddd',
+      backgroundColor: 'transparent'
+    }
   }
 };
 

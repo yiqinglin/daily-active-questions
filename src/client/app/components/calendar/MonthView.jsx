@@ -6,6 +6,7 @@ import moment from 'moment';
 import { getDaysInCurrentMonthGrid } from 'app/lib/helpers';
 import Day from './Monthly/Day';
 import withDailyAverage from 'app/composers/queries/withDailyAverage';
+import ScoreBubble from 'app/components/dashboard/ScoreBubble';
 
 type Props = {
   classes: Object,
@@ -34,7 +35,7 @@ class MonthView extends React.Component<Props, State> {
     // Match date and return average vaule.
     for (let day of dailyAverage) {
       if (moment.parseZone(day.timestamp).isSame(moment.parseZone(date), 'day')) {
-        return day.value;
+        return <ScoreBubble score={day.value} />;
       }
     }
 

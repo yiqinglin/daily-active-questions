@@ -10,28 +10,43 @@ type Props = {
   placeholder: string,
   value: string,
   history: Object,
+  location: Object,
   onChange: string => void
 }
 
 const buttonStyle = {
   marginLeft: '5px'
 }
-const HomeActions = ({ classes: c, placeholder, value, onChange, history }: Props) => (
-  <div className={c.container}>
+const HomeActions = ({ classes: c, placeholder, value, onChange, history, location }: Props) => {
+  const backToHome = (
     <FloatButton
-      onClick={() => window.location="/logout"}
-      text="exit_to_app"
+      onClick={() => window.location="/"}
+      text="home"
       isIcon
       styles={buttonStyle}
     />
+  );
+  const dashboard = (
     <FloatButton
       onClick={() => history.push('/dashboard')}
       text="show_chart"
       isIcon
       styles={buttonStyle}
     />
-  </div>
-);
+  );
+
+  return (
+    <div className={c.container}>
+      <FloatButton
+        onClick={() => window.location="/logout"}
+        text="exit_to_app"
+        isIcon
+        styles={buttonStyle}
+      />
+      {location.pathname === '/' ? dashboard : backToHome}
+    </div>
+  );
+}
 
 const styles = {
   container: {
