@@ -22,7 +22,12 @@ const theme = {
   colorAllow: '#94A37E',
   colorReject: '#BC8485',
   colorAccent: '#94A37E',
-  colorNeutral: '#AAAAAA'
+  colorNeutral: '#AAAAAA',
+  colorCodeRed: '#540B0E',
+  colorCodeOrange: '#9E2A2B',
+  colorCodeYellow: '#E09F3E',
+  colorCodeGreen: '#82AD6D',
+  colorCodeBlue: '#335C67'
 }
 
 const App = ({ classes: c }: Props) => (

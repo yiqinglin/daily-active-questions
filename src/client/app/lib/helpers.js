@@ -51,7 +51,25 @@ function getMonthDays(startAt: string, length?: number): Array<string> {
   return res;
 }
 
+function scoreToColor(score: Number) {
+  const value = parseFloat(score);
+
+  switch (Math.floor(value/2)) {
+    case 1:
+      return 'colorCodeRed';
+    case 2:
+      return 'colorCodeOrange';
+    case 3:
+      return 'colorCodeYellow';
+    case 4:
+     return 'colorCodeGreen';
+    case 5:
+      return 'colorCodeBlue';
+  }
+}
+
 export {
   getCurrentTime,
-  getDaysInCurrentMonthGrid
+  getDaysInCurrentMonthGrid,
+  scoreToColor
 }

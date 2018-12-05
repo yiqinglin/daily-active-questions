@@ -4,6 +4,7 @@ import { compose } from 'react-apollo';
 import injectSheet, { withTheme } from 'react-jss';
 import classname from 'classnames';
 import moment from 'moment';
+import { withRouter } from 'react-router-dom';
 
 type Props = {
   classes: Object,
@@ -11,7 +12,7 @@ type Props = {
   activeMonth: string,
   children: React.Node
 }
-const Day = ({ classes: c, date, activeMonth, children }: Props) => {
+const Day = ({ classes: c, date, activeMonth, history, children }: Props) => {
   const isWeekend = (date) => {
     // momnent.day() will return 0 for Sunday and 6 for Saturday.
     return moment.parseZone(date).day() % 6 == 0;
@@ -22,7 +23,7 @@ const Day = ({ classes: c, date, activeMonth, children }: Props) => {
   }
 
   return (
-    <div className={c.container}>
+    <div className={c.container} onClick={() => history.push(`/dashboard/details/${moment.parseZone(date).format('YYYY/MM/DD')}`)}>
       <div className={classname(c.date, isWeekend(date) && c.weekend, isNeighboringMonth(date) && c.neighborMonth)}>
         {moment.parseZone(date).date()}
       </div>
@@ -62,6 +63,7 @@ const styles = theme => ({
 });
 
 export default compose(
+  withRouter,
   withTheme,
   injectSheet(styles)
 )(Day);

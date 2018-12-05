@@ -35,12 +35,12 @@ const Navigation = ({ classes: c, activeDate, history, onClickNext, onClickPrev 
   }
   const isCurrentMonth = () => moment.parseZone(activeDate).isSame(moment(), 'month');
   const onClickNextMonth = () => {
-    if (!isCurrentMonth()) { history.push(`/dashboard/monthly/${getYearMonth('next')}`)};
+    if (!isCurrentMonth()) { history.push(`/dashboard/monthly/${moment.parseZone(activeDate).add(1, 'months').format('YYYY/MM/DD')}`)};
   };
 
   return (
     <div className={c.container}>
-      <div className={c.arrowBtn} onClick={() => history.push(`/dashboard/monthly/${getYearMonth('prev')}`)}>
+      <div className={c.arrowBtn} onClick={() => history.push(`/dashboard/monthly/${moment.parseZone(activeDate).add(-1, 'months').format('YYYY/MM/DD')}`)}>
         <i className="material-icons">chevron_left</i>
       </div>
       <div>
