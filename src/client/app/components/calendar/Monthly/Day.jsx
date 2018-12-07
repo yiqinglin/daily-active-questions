@@ -8,10 +8,12 @@ import { withRouter } from 'react-router-dom';
 
 type Props = {
   classes: Object,
+  history: Object,
   date: string,
   activeMonth: string,
   children: React.Node
 }
+
 const Day = ({ classes: c, date, activeMonth, history, children }: Props) => {
   const isWeekend = (date) => {
     // momnent.day() will return 0 for Sunday and 6 for Saturday.

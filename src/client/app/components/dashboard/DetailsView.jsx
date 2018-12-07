@@ -7,263 +7,49 @@ import cx from 'classnames';
 import Waypoint from 'react-waypoint';
 import { withRouter } from 'react-router-dom';
 import { scoreToColor } from 'app/lib/helpers';
+import withDailyDetails from 'app/composers/queries/withDailyDetails';
+
+type DailyDetails = {
+  date: String,
+  questions: Array<Object>
+}
 
 type Props = {
   classes: Object,
-  activeDate: string
+  history: Object,
+  activeDate: string,
+  isFetching: boolean,
+  dailyDetails: Array<DailyDetails>
 }
 type State = {
-  onScrollLeave: boolean
+  onScrollLeave: boolean,
+  scrollIntoView: boolean
 }
 
 class DetailsView extends React.Component<Props, State> {
   highlightedElem: HTMLDivElement;
-  state = { onScrollLeave: false };
-  
-  componentDidMount(){
-    window.scrollTo({
-      top: this.highlightedElem.offsetTop, 
-      behavior: "smooth"
-  })
+  state = { onScrollLeave: false, scrollIntoView: false };
+
+  componentDidUpdate(prevProps, prevState) {
+    if (!prevState.scrollIntoView && this.highlightedElem) {
+      window.scrollTo({
+        top: this.highlightedElem.offsetTop, 
+        behavior: "smooth"
+      })
+      this.setState({ scrollIntoView: true })
+    }
   }
 
   render() {
-    const { classes: c, activeDate, history } = this.props;
+    const { classes: c, activeDate, history, isFetching, dailyDetails } = this.props;
     const { onScrollLeave } = this.state;
-    const mockData = [
-      {
-        date: moment('2018-11-01', 'YYYY-MM-DD').format(),
-        questions: {
-          'to make friends': '3',
-          'to meditate': '3',
-          'to understand': '5'
-        }
-      },
-      {
-        date: moment('2018-11-02', 'YYYY-MM-DD').format(),
-        questions: {
-          'to make friends': '3',
-          'to meditate': '3',
-          'to understand': '5'
-        }
-      },
-      {
-        date: moment('2018-11-03', 'YYYY-MM-DD').format(),
-        questions: {
-          'to make friends': '3',
-          'to meditate': '7',
-          'to understand': '8'
-        }
-      },
-      {
-        date: moment('2018-11-04', 'YYYY-MM-DD').format(),
-        questions: {}
-      },
-      {
-        date: moment('2018-11-05', 'YYYY-MM-DD').format(),
-        questions: {
-          'to make friends': '9',
-          'to meditate': '6',
-          'to understand': '5'
-        }
-      },
-      {
-        date: moment('2018-11-06', 'YYYY-MM-DD').format(),
-        questions: {
-          'to make friends': '3',
-          'to meditate': '3',
-          'to understand': '5'
-        }
-      },
-      {
-        date: moment('2018-11-07', 'YYYY-MM-DD').format(),
-        questions: {
-          'to make friends': '3',
-          'to meditate': '3',
-          'to understand': '5'
-        }
-      },
-      {
-        date: moment('2018-11-08', 'YYYY-MM-DD').format(),
-        questions: {
-          'to make friends': '3',
-          'to meditate': '3',
-          'to understand': '5'
-        }
-      },
-      {
-        date: moment('2018-11-09', 'YYYY-MM-DD').format(),
-        questions: {
-          'to make friends': '3',
-          'to meditate': '3',
-          'to understand': '5'
-        }
-      },
-      {
-        date: moment('2018-11-10', 'YYYY-MM-DD').format(),
-        questions: {
-          'to make friends': '3',
-          'to meditate': '3',
-          'to understand': '5'
-        }
-      },
-      {
-        date: moment('2018-11-11', 'YYYY-MM-DD').format(),
-        questions: {
-          'to make friends': '3',
-          'to meditate': '3',
-          'to understand': '5'
-        }
-      },
-      {
-        date: moment('2018-11-12', 'YYYY-MM-DD').format(),
-        questions: {
-          'to make friends': '3',
-          'to meditate': '3',
-          'to understand': '5'
-        }
-      },
-      {
-        date: moment('2018-11-13', 'YYYY-MM-DD').format(),
-        questions: {
-          'to make friends': '3',
-          'to meditate': '3',
-          'to understand': '5'
-        }
-      },
-      {
-        date: moment('2018-11-14', 'YYYY-MM-DD').format(),
-        questions: {}
-      },
-      {
-        date: moment('2018-11-15', 'YYYY-MM-DD').format(),
-        questions: {
-          'to make friends': '3',
-          'to meditate': '3',
-          'to understand': '5'
-        }
-      },
-      {
-        date: moment('2018-11-16', 'YYYY-MM-DD').format(),
-        questions: {
-          'to make friends': '3',
-          'to meditate': '3',
-          'to understand': '5'
-        }
-      },
-      {
-        date: moment('2018-11-17', 'YYYY-MM-DD').format(),
-        questions: {
-          'to make friends': '3',
-          'to meditate': '3',
-          'to understand': '5'
-        }
-      },
-      {
-        date: moment('2018-11-18', 'YYYY-MM-DD').format(),
-        questions: {
-          'to make friends': '3',
-          'to meditate': '3',
-          'to understand': '5'
-        }
-      },
-      {
-        date: moment('2018-11-19', 'YYYY-MM-DD').format(),
-        questions: {
-          'to make friends': '3',
-          'to meditate': '3',
-          'to understand': '5'
-        }
-      },
-      {
-        date: moment('2018-11-20', 'YYYY-MM-DD').format(),
-        questions: {
-          'to make friends': '3',
-          'to meditate': '3',
-          'to understand': '5'
-        }
-      },
-      {
-        date: moment('2018-11-21', 'YYYY-MM-DD').format(),
-        questions: {
-          'to make friends': '3',
-          'to meditate': '3',
-          'to understand': '5'
-        }
-      },
-      {
-        date: moment('2018-11-22', 'YYYY-MM-DD').format(),
-        questions: {}
-      },
-      {
-        date: moment('2018-11-23', 'YYYY-MM-DD').format(),
-        questions: {
-          'to make friends': '3',
-          'to meditate': '3',
-          'to understand': '5'
-        }
-      },
-      {
-        date: moment('2018-11-24', 'YYYY-MM-DD').format(),
-        questions: {
-          'to make friends': '3',
-          'to meditate': '3',
-          'to understand': '5'
-        }
-      },
-      {
-        date: moment('2018-11-25', 'YYYY-MM-DD').format(),
-        questions: {
-          'to make friends': '3',
-          'to meditate': '3',
-          'to understand': '5'
-        }
-      },
-      {
-        date: moment('2018-11-26', 'YYYY-MM-DD').format(),
-        questions: {
-          'to make friends': '3',
-          'to meditate': '3',
-          'to understand': '5'
-        }
-      },
-      {
-        date: moment('2018-11-27', 'YYYY-MM-DD').format(),
-        questions: {
-          'to make friends': '3',
-          'to meditate': '3',
-          'to understand': '5'
-        }
-      },
-      {
-        date: moment('2018-11-28', 'YYYY-MM-DD').format(),
-        questions: {
-          'to make friends': '3',
-          'to meditate': '3',
-          'to understand': '5'
-        }
-      },
-      {
-        date: moment('2018-11-29', 'YYYY-MM-DD').format(),
-        questions: {
-          'to make friends': '3',
-          'to meditate': '3',
-          'to understand': '5'
-        }
-      },
-      {
-        date: moment('2018-11-30', 'YYYY-MM-DD').format(),
-        questions: {
-          'to make friends': '3',
-          'to meditate': '3',
-          'to understand': '5'
-        }
-      }
-    ];
     
+    if (isFetching) return (<div>Fetching...</div>);
+
     const createRef = (element, date) => {
       if (moment.parseZone(date).isSame(moment.parseZone(activeDate), 'day') && !this.highlightedElem) {
         this.highlightedElem = element;
+
       }
     };
     const isCurrentMonth = () => moment.parseZone(activeDate).isSame(moment(), 'month');
@@ -287,23 +73,23 @@ class DetailsView extends React.Component<Props, State> {
           </div>
         </div>
         <div>
-          {mockData.map((day, i) =>
-            <div key={i} className={c.dayRow} ref={(element) => createRef(element, day.date)}>
+          {dailyDetails.map((daily, i) =>
+            <div key={i} className={c.dayRow} ref={(element) => createRef(element, daily.date)}>
               <div className={c.date}>
-                <span className={c.dayMonth}>{moment.parseZone(day.date).format('MMMM D')}</span>
-                <span className={c.dayOfTheWeek}>{moment.parseZone(day.date).format('dddd')}</span>
+                <span className={c.dayMonth}>{moment.parseZone(daily.date).format('MMMM D')}</span>
+                <span className={c.dayOfTheWeek}>{moment.parseZone(daily.date).format('dddd')}</span>
               </div>
               <div className={c.qSection}>
-                {Object.keys(day.questions).length > 0 && Object.keys(day.questions).map((question, id) => 
+                {daily.questions.length > 0 && daily.questions.map((question, id) => 
                   <div className={c.questionRow} key={id}>
-                    <div className={cx(c.colorCode, scoreToColor(day.questions[question]))}/>
-                    <div className={c.question}>{question}</div>
-                    <div className={cx(c.value, scoreToColor(day.questions[question]))}>
-                      {day.questions[question]}
+                    <div className={cx(c.colorCode, scoreToColor(question.value))}/>
+                    <div className={c.question}>{question.question}</div>
+                    <div className={cx(c.value, scoreToColor(question.value))}>
+                      {question.value}
                     </div>
                   </div>
                 )}
-                {Object.keys(day.questions).length == 0 && (
+                {daily.questions.length == 0 && (
                   <div className={c.noEntry}>No data entered for the day.</div>
                 )}
               </div>
@@ -441,6 +227,7 @@ const styles = theme => ({
 });
 
 export default compose(
+  withDailyDetails,
   withRouter,
   withTheme,
   injectSheet(styles)

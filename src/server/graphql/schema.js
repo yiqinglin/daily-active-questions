@@ -26,11 +26,22 @@ type DailyAverage {
   timestamp: String
 }
 
+type QuestionAnswer {
+  question: String,
+  value: String
+}
+
+type DailyDetails {
+  date: String,
+  questions: [QuestionAnswer]
+}
+
 # the schema allows the following query:
 type Query {
   user: User
   activeQuestions(todayIs: String): [Question]
   dailyAverage(timeframe: String): [DailyAverage]
+  dailyDetails(month: String): [DailyDetails]
 }
 
 # this schema allows the following mutation:
