@@ -60,8 +60,8 @@ export default {
       Object.keys(dailyDetails.values).map(qId => 
         questions.push({
           question: questionDict[qId].toString(),
-        value: dailyDetails.values[qId]
-      }));
+          value: dailyDetails.values[qId]
+        }));
 
       res.splice(moment(dailyDetails.timestamp).date() - 1, 1, {
         date: dailyDetails.timestamp,
