@@ -1,5 +1,6 @@
 import passport from 'passport';
 import { OAuth2Strategy as GoogleStrategy } from 'passport-google-oauth';
+import moment from 'moment';
 import app from '~/app';
 
 passport.serializeUser((user, done) => {
@@ -28,9 +29,20 @@ passport.use(new GoogleStrategy({
   if (userProfile.exists) {
     done(null, userProfile.data());
   } else {
-    app.db.collection('users').doc(profile.id).set(profile)
+    const newUser = {
+      gender: profile.gender,
+      id: profile.id,
+      displayName: profile.displayName,
+      avatar: profile.photos && profile.photos[0].value,
+      language: profile._json.language,
+      name: profile.name,
+      provider: profile.provider,
+      registeredAt: moment().format()
+    };
+
+    app.db.collection('users').doc(profile.id).set(newUser)
     .then(function() {
-      done(null, profile);
+      done(null, newUser);
     })
     .catch(function(error) {
       console.log('Passport strategy error:', error);

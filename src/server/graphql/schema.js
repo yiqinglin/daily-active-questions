@@ -17,6 +17,7 @@ type User {
   avatar: String
   language: String
   displayName: String
+  registeredAt: String
   questions: [Question]
 }
 

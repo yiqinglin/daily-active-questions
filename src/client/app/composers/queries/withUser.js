@@ -8,6 +8,7 @@ query user {
     id
     avatar
     displayName
+    registeredAt
   }
 }`;
 const mapDataToProps = result => ({

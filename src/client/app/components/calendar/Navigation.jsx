@@ -5,14 +5,16 @@ import injectSheet from 'react-jss';
 import cx from 'classnames';
 import moment from 'moment';
 import { withRouter } from 'react-router-dom';
+import withUser from 'app/composers/queries/withUser';
 
 type Props = {
   classes: Object,
   activeDate: string,
-  history: Object
+  history: Object,
+  user: Object
 }
 
-const Navigation = ({ classes: c, activeDate, history, onClickNext, onClickPrev }: Props) => {
+const Navigation = ({ classes: c, activeDate, history, onClickNext, onClickPrev, user }: Props) => {
   const activeMonth = parseInt(moment.parseZone(activeDate).format("MM"));
   const activeYear = parseInt(moment.parseZone(activeDate).format("YYYY"));
   const getYearMonth = (direction: string) => {
@@ -34,19 +36,30 @@ const Navigation = ({ classes: c, activeDate, history, onClickNext, onClickPrev 
     }
   }
   const isCurrentMonth = () => moment.parseZone(activeDate).isSame(moment(), 'month');
-  const onClickNextMonth = () => {
-    if (!isCurrentMonth()) { history.push(`/dashboard/monthly/${moment.parseZone(activeDate).add(1, 'months').format('YYYY/MM/DD')}`)};
+  const isBeforeRegister = () => moment.parseZone(activeDate).isSameOrBefore(moment(user.registeredAt), 'month');
+  const redirectClickWithGuard = (guard, redirectUrl) => {
+    if (guard) {
+      history.push(redirectUrl);
+    }
   };
 
   return (
     <div className={c.container}>
-      <div className={c.arrowBtn} onClick={() => history.push(`/dashboard/monthly/${moment.parseZone(activeDate).add(-1, 'months').format('YYYY/MM/DD')}`)}>
+      <div
+        className={cx(c.arrowBtn, isBeforeRegister() && c.disabled)}
+        onClick={() => redirectClickWithGuard(!isBeforeRegister(),
+          `/dashboard/monthly/${moment.parseZone(activeDate).add(-1, 'months').format('YYYY/MM/DD')}`)}
+      >
         <i className="material-icons">chevron_left</i>
       </div>
       <div>
         {moment.parseZone(activeDate).format("MMMM YYYY")}
       </div>
-      <div className={cx(c.arrowBtn, isCurrentMonth() && c.disabled)} onClick={() => onClickNextMonth()}>
+      <div
+        className={cx(c.arrowBtn, isCurrentMonth() && c.disabled)}
+        onClick={() => redirectClickWithGuard(!isCurrentMonth(),
+          `/dashboard/monthly/${moment.parseZone(activeDate).add(1, 'months').format('YYYY/MM/DD')}`)}
+      >
         <i className="material-icons">chevron_right</i>
       </div>
     </div>
@@ -84,5 +97,6 @@ const styles = {
 
 export default compose(
   injectSheet(styles),
-  withRouter
+  withRouter,
+  withUser,
 )(Navigation);
