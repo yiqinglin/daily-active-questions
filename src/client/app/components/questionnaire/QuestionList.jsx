@@ -12,6 +12,7 @@ import AnswerScale from './AnswerScale';
 import AddQuestion from './AddQuestion';
 import Modal from '../Modal';
 import FlexButton from '../FlexButton';
+import LoadingView from '../LoadingView';
 
 type Props = {
   classes: Object,
@@ -34,7 +35,8 @@ type QuestionType = {
 type State = {
   updatedAnswers: { [string]: number },
   questionInEdit: QuestionType,
-  deleteConfirm: QuestionType
+  deleteConfirm: QuestionType,
+  loading: boolean
 }
 
 class QuestionList extends React.Component<Props, State> {
@@ -47,7 +49,8 @@ class QuestionList extends React.Component<Props, State> {
     questionInEdit: {
       title: '',
       id: ''
-    }
+    },
+    loading: false
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -78,9 +81,10 @@ class QuestionList extends React.Component<Props, State> {
   }
 
   handleDelete = () => {
+    this.setState({ loading: true });
     this.props.deleteQuestion(this.state.deleteConfirm.id)
       .then(() => confirm('The question has been deleted'))
-      .then(() => this.setState({ deleteConfirm: { id: '', title: ''}}))
+      .then(() => this.setState({ deleteConfirm: { id: '', title: ''}, loading: false}))
       .catch(() => alert('problem!'));
   }
 
@@ -160,6 +164,7 @@ class QuestionList extends React.Component<Props, State> {
           />
         }
         {DeleteModal}
+        {this.state.loading && <LoadingView />}
       </div>
     );
   }

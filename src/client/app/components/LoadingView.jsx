@@ -4,7 +4,8 @@ import injectSheet from 'react-jss';
 
 type Props = {
   classes: Object,
-  message?: string
+  message?: string,
+  quoteCredit?: string
 }
 
 class LoadingView extends React.Component<Props> {
@@ -23,10 +24,17 @@ class LoadingView extends React.Component<Props> {
   }
 
   render() {
-    const { classes: c, message } = this.props;
+    const { classes: c, message, quoteCredit } = this.props;
 
     return (
-      <div className={c.container}>{message ? message : 'Loading...'}</div>
+      <div className={c.container}>
+        <div>
+          <p>{message ? message : 'Loading...'}</p>
+          {quoteCredit && 
+            <p className={c.credit}>- {quoteCredit}</p>
+          }
+        </div>
+      </div>
     );
   }
 }
@@ -40,14 +48,20 @@ const styles = {
     position: 'fixed',
     width: '100%',
     height: '100%',
-    backgroundColor: 'rgba(0,0,0,0.2)',
+    backgroundColor: 'rgba(0,0,0,0.6)',
     display: 'flex',
-    alignItems: 'center',
+    alignItems: 'flex-end',
     justifyContent: 'center',
     color: 'white',
-    fontSize: '50px',
-    textTransform: 'uppercase',
-    fontWeight: '500'
+    fontSize: '20px',
+    fontWeight: '300',
+    zIndex: '10',
+    padding: '50px'
+  },
+  credit: {
+    fontSize: '15px',
+    fontStyle: 'italic',
+    textAlign: 'right'
   }
 };
 

@@ -8,6 +8,7 @@ import AnswerScale from './AnswerScale';
 import Modal from '../Modal';
 import TextField from '../TextField';
 import FlexButton from '../FlexButton';
+import LoadingView from '../LoadingView';
 
 type QuestionType = {
   title: string,
@@ -24,7 +25,8 @@ type Props = {
   onClose: Function 
 }
 type State = {
-  questionDraft: string
+  questionDraft: string,
+  loading: boolean
 }
 
 class AddQuestion extends React.Component<Props, State> {
@@ -32,7 +34,8 @@ class AddQuestion extends React.Component<Props, State> {
     super(props);
 
     this.state = {
-      questionDraft: props.question ? props.question.title : ''
+      questionDraft: props.question ? props.question.title : '',
+      loading: false
     }
   }
 
@@ -40,6 +43,7 @@ class AddQuestion extends React.Component<Props, State> {
     const { question } = this.props;
     const { questionDraft } = this.state;
     
+    this.setState({ loading: true });
     if (!!questionDraft) {
       if (question) {
         this.handleAddQuestion(questionDraft);
@@ -54,6 +58,7 @@ class AddQuestion extends React.Component<Props, State> {
 
     if (question && question.id) {
       this.props.updateQuestion(newQuestion, question.id)
+      .then(() => this.setState({ loading: false }))
       .then(() => this.props.onSuccess())
       .catch(e => console.log(e))
     }
@@ -96,6 +101,12 @@ class AddQuestion extends React.Component<Props, State> {
             <FlexButton theme="CANCEL" text="cancel" onClick={this.props.onClose} />
           </div>
         </div>
+        {this.state.loading && 
+          <LoadingView
+            message="If you don't know where you are going, any road will take you there." 
+            quoteCredit="Lewis Carroll"  
+          />
+        }
       </Modal>
     )
   }
