@@ -6,6 +6,7 @@ import QuestionList from 'app/components/questionnaire/QuestionList';
 import AddQuestion from 'app/components/questionnaire/AddQuestion';
 import Button from 'app/components/Button';
 import Flag from './Flag';
+import LoadingView from './LoadingView';
 
 type Props = {
   classes: Object,
@@ -84,6 +85,7 @@ class Home extends React.Component<Props, State> {
           {PageFlags}
         </div>
         {addQuestionModal}
+        {this.state.isSubmitting && <LoadingView message="Updating..." />}
       </div>
     );
   }
