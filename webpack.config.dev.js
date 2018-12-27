@@ -10,7 +10,8 @@ module.exports = [
     entry: './src/client/index.js',
     devtool: 'inline-source-map',
     output: {
-      filename: './public/bundle.js'
+      filename: 'bundle.js',
+      path: __dirname + '/public'
     },
     resolve: {
       /**
