@@ -15,6 +15,7 @@ type Props = {
   extendable: boolean,
   title: String,
   placement: String,
+  reset: boolean,
   onClick: Function,
   onConfirm: Function,
   onCancel: Function
@@ -22,14 +23,16 @@ type Props = {
 
 type State = {
   extended: boolean,
-  open: boolean
+  tooltipOpen: boolean
 }
 
 class Flag extends React.Component<Props, State> {
-  state = {
+  initialState = {
     extended: false,
-    open: false
+    tooltipOpen: false
   }
+
+  state = this.initialState;
 
   handleClick = () => {
     if (this.props.extendable) {
@@ -55,21 +58,26 @@ class Flag extends React.Component<Props, State> {
 
   handleTooltipOpen= () => {
     if (!this.props.extendable || !this.state.extended) {
-      this.setState({ open: true });
+      this.setState({ tooltipOpen: true });
     }
   }
 
   handleTooltipClose= () => {
     if (!this.props.extendable || !this.state.extended) {
-      this.setState({ open: false });
+      this.setState({ tooltipOpen: false });
     }
   }
 
-  
+  componentDidUpdate(prevProps) {
+    if (this.props.reset && !prevProps.reset) {
+      // Reset state.
+      this.setState(this.initialState)
+    }
+  }
 
   render() {
     const { classes: c, custom, icon, styles, onConfirm, onCancel, extendable, title, placement } = this.props;
-    const { extended, open } = this.state;
+    const { extended, tooltipOpen } = this.state;
 
     const extendedButtons = extended && (
       <div className={c.extendedButtons}>
@@ -91,7 +99,7 @@ class Flag extends React.Component<Props, State> {
       <Tooltip
         title={title}
         placement={placement}
-        open={open}
+        open={tooltipOpen}
       >
         <div
           className={classNames(c.container, extended && c.extended)}

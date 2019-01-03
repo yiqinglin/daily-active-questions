@@ -16,16 +16,16 @@ type Props = {
 }
 type State = {
   modalOpen: boolean,
-  writeMode: boolean,
-  isSubmitting: boolean
+  isSubmitting: boolean,
+  flagNeedsReset: boolean
 }
 
 class Home extends React.Component<Props, State> {
   static contextType = AppStateContext;
   state = {
     modalOpen: false,
-    writeMode: false,
-    isSubmitting: false
+    isSubmitting: false,
+    flagNeedsReset: false
   }
   
   closeModal = () => {
@@ -33,13 +33,18 @@ class Home extends React.Component<Props, State> {
   }
 
   onClickSubmit = () => {
-    if (!this.state.isSubmitting) {
-      this.setState({isSubmitting: true})
+    if (!this.context.isSubmitting) {
+      this.context.updateSubmitState(true);
     }
   }
 
   onFinishSubmit = () => {
-    this.setState({ isSubmitting: false, writeMode: false })
+    this.context.updateSubmitState(false);
+    this.context.updateEditState(false);
+
+    // When flagNeedsReset is flipped from False to True, Flag component updates/rerenders.
+    // So we need to reset the value of this state after it's flipped so that it can be reused next time.
+    this.setState({ flagNeedsReset: true }, () => this.setState({ flagNeedsReset: false }))
   }
 
   render() {
@@ -50,12 +55,13 @@ class Home extends React.Component<Props, State> {
           icon="/img/answer.svg"
           custom
           hex={theme.colorPrimary}
-          onClick={this.context.toggleEdit}
+          onClick={() => this.context.updateEditState(true)}
           extendable
           onConfirm={this.onClickSubmit}
-          onCancel={this.context.toggleEdit}
+          onCancel={() => this.context.updateEditState(false)}
           title="Edit"
           placement="right"
+          reset={this.state.flagNeedsReset}
         />
         <Flag
           icon="add_circle"
@@ -84,14 +90,14 @@ class Home extends React.Component<Props, State> {
       <Paper style={paperStyle}>
         <h3 className={c.headline}>Did I do my best...</h3>
         <QuestionList
-          onSubmit={this.state.isSubmitting}
+          onSubmit={this.context.isSubmitting}
           onFinishSubmit={this.onFinishSubmit}
         />
         <div className={c.pageFlags}>
           {PageFlags}
         </div>
         {addQuestionModal}
-        {this.state.isSubmitting && <LoadingView message="Updating..." />}
+        {this.context.isSubmitting && <LoadingView message="Updating..." />}
       </Paper>
     );
   }

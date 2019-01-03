@@ -21,7 +21,6 @@ type Props = {
   activeQuestions: Array<Object>,
   answer: Function,
   deleteQuestion: Function,
-  onSwitchMode: Function,
   onFinishSubmit: Function,
   isFetching: boolean,
   writeMode: boolean,
@@ -62,7 +61,7 @@ class QuestionList extends React.Component<Props, State> {
   }
 
   updateAnswer = (questionId, value) => {
-    if (!this.context.onEdit) return;
+    if (!this.context.isEditing) return;
 
     const { updatedAnswers } = this.state;
     
@@ -92,7 +91,7 @@ class QuestionList extends React.Component<Props, State> {
 
   handleCancel = () => {
     this.setState({updatedAnswers: {}});
-    this.context.toggleEdit();
+    this.context.updateEditState(false);
   }
 
   render() {
@@ -152,7 +151,7 @@ class QuestionList extends React.Component<Props, State> {
               editQuestion={() => this.setState({ questionInEdit: { title: q.title, id: q.id }})}
             >
               <AnswerScale 
-                selected={this.context.onEdit ? this.state.updatedAnswers[q.id] : q.answer}
+                selected={this.context.isEditing ? this.state.updatedAnswers[q.id] : q.answer}
                 onSelect={v => this.updateAnswer(q.id, v)}
               />
             </Question>

@@ -51,7 +51,7 @@ const HomeActions = ({ classes: c, placeholder, value, onChange, history, locati
 
   return (
     <AppStateContext.Consumer>
-      {( { onEdit } ) => (
+      {( { isEditing, updateSubmitState } ) => (
         <div className={c.container}>
           <Tooltip title="Logout">
             <Fab aria-label="logout" style={buttonStyle} size="medium">
@@ -59,9 +59,15 @@ const HomeActions = ({ classes: c, placeholder, value, onChange, history, locati
             </Fab>
           </Tooltip>
           {location.pathname === '/' ? dashboard : backToHome}
-          {onEdit &&
+          {isEditing &&
             <Tooltip title="Submit">
-              <Fab aria-label="logout" style={buttonStyle} size="medium" color="primary">
+              <Fab
+                aria-label="logout"
+                style={buttonStyle}
+                size="medium"
+                color="primary"
+                onClick={() => updateSubmitState(true)}
+              >
                 <i className={cx(c.confirmBtn, "material-icons")}>check</i>
               </Fab>
             </Tooltip>

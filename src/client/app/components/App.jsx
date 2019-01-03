@@ -46,15 +46,23 @@ class App extends React.Component<Props, State> {
   constructor(props) {
     super(props);
     
-    this.toggleEdit = () => {
-      this.setState(state => ({
-        onEdit: !state.onEdit
-      }))
+    this.updateEditState = (nextState) => {
+      this.setState({
+        isEditing: nextState
+      })
+    }
+
+    this.updateSubmitState = (nextState) => {
+      this.setState({
+        isSubmitting: nextState
+      })
     }
 
     this.state = {
-      onEdit: false,
-      toggleEdit: this.toggleEdit
+      isEditing: false,
+      isSubmitting: false,
+      updateEditState: this.updateEditState,
+      updateSubmitState: this.updateSubmitState
     }
   }
 
