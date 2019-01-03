@@ -52,14 +52,14 @@ const styles = theme => ({
       },
       position: 'absolute',
       right: '0',
-      left: '-17px',
-      top: '-20px',
+      left: '-20px',
+      top: '-25px',
       textAlign: 'center',
-      fontSize: '10px',
+      fontSize: '12px',
       color: '#A7A7A7',
       fontWeight: '100',
       textTransform: 'capitalize',
-      width: '50px'
+      width: '56px'
     }
   },
   score: {

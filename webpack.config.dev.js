@@ -10,7 +10,8 @@ module.exports = [
     entry: './src/client/index.js',
     devtool: 'inline-source-map',
     output: {
-      filename: './public/bundle.js'
+      filename: 'bundle.js',
+      path: __dirname + '/public'
     },
     resolve: {
       /**
@@ -31,14 +32,14 @@ module.exports = [
       }
     },
     module: {
-      loaders: [
+      rules: [
         {
           test: /\.jsx?$/,
           exclude: /(node_modules|bower_components)/,
           loader: 'babel-loader',
           query: {
-            plugins: ['transform-flow-strip-types'],
-            presets: ['es2015', 'react', 'stage-2']
+            plugins: ['@babel/plugin-proposal-class-properties'],
+            presets: ['@babel/preset-env', '@babel/preset-react', '@babel/preset-flow']
           }
         }
       ]
@@ -87,12 +88,12 @@ module.exports = [
       }
     },
     module: {
-      loaders: [
+      rules: [
         {
           test: /\.js$/,
           loader: 'babel-loader',
           query: {
-            presets: ['es2015', 'stage-2']
+            presets: ['@babel/preset-env', '@babel/preset-flow']
           }
         }
       ]

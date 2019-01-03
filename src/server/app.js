@@ -19,6 +19,7 @@ const firebaseApp = firebaseAdmin.initializeApp({
   credential: firebaseAdmin.credential.cert(serviceAccount)
 });
 export const db = firebaseAdmin.firestore();
+db.settings = { timestampsInSnapshots: true };
 
 const FirestoreStore = require('firestore-store')(session);
 /**
@@ -32,11 +33,6 @@ app.db = db;
  */
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-
-function loginmiddleware(req, res, next) {
-  console.log('login middleware', req.user && req.user.id);
-  next();
-}
 
 /**
  * Initialize Passport
@@ -72,7 +68,7 @@ if (process.env.NODE_ENV !== 'production') {
  * Serve files in the /public directory as static files.
  */
 app.use(express.static('public'));
-app.use(loginmiddleware);
+
 /**
  * Auth routes
  */

@@ -6,6 +6,7 @@ import withActiveQuestions from 'app/composers/queries/withActiveQuestions';
 import withSubmitAnswers from 'app/composers/mutations/withSubmitAnswers';
 import withDeleteQuestion from 'app/composers/mutations/withDeleteQuestion';
 import withUpdateQuestion from 'app/composers/mutations/withUpdateQuestion';
+import { AppStateContext } from 'app/components/AppStateContext';
 import { getCurrentTime } from 'app/lib/helpers';
 import Question from './Question';
 import AnswerScale from './AnswerScale';
@@ -40,6 +41,7 @@ type State = {
 }
 
 class QuestionList extends React.Component<Props, State> {
+  static contextType = AppStateContext;
   state = {
     updatedAnswers: {},
     deleteConfirm: {
@@ -60,7 +62,7 @@ class QuestionList extends React.Component<Props, State> {
   }
 
   updateAnswer = (questionId, value) => {
-    if (!this.props.writeMode) return;
+    if (!this.context.onEdit) return;
 
     const { updatedAnswers } = this.state;
     
@@ -90,7 +92,7 @@ class QuestionList extends React.Component<Props, State> {
 
   handleCancel = () => {
     this.setState({updatedAnswers: {}});
-    this.props.onSwitchMode();
+    this.context.toggleEdit();
   }
 
   render() {
@@ -150,7 +152,7 @@ class QuestionList extends React.Component<Props, State> {
               editQuestion={() => this.setState({ questionInEdit: { title: q.title, id: q.id }})}
             >
               <AnswerScale 
-                selected={writeMode ? this.state.updatedAnswers[q.id] : q.answer}
+                selected={this.context.onEdit ? this.state.updatedAnswers[q.id] : q.answer}
                 onSelect={v => this.updateAnswer(q.id, v)}
               />
             </Question>

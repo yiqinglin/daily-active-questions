@@ -2,8 +2,11 @@
 import React from 'react';
 import { compose } from 'react-apollo';
 import injectSheet from 'react-jss';
+import cx from 'classnames';
 import { withRouter } from 'react-router-dom';
-import FloatButton from './FloatButton';
+import Fab from '@material-ui/core/Fab';
+import Tooltip from '@material-ui/core/Tooltip';
+import { AppStateContext } from './AppStateContext';
 
 type Props = {
   classes: Object,
@@ -15,36 +18,57 @@ type Props = {
 }
 
 const buttonStyle = {
-  marginLeft: '5px'
-}
+  marginLeft: '10px'
+};
+
 const HomeActions = ({ classes: c, placeholder, value, onChange, history, location }: Props) => {
   const backToHome = (
-    <FloatButton
-      onClick={() => window.location="/"}
-      text="home"
-      isIcon
-      styles={buttonStyle}
-    />
+    <Tooltip title="Home">
+      <Fab
+        aria-label="home"
+        style={buttonStyle}
+        onClick={() => window.location="/"}
+        size="medium"
+        color="default"
+      >
+        <i className="material-icons">home</i>
+    </Fab>
+   </Tooltip>
   );
   const dashboard = (
-    <FloatButton
-      onClick={() => history.push('/dashboard')}
-      text="show_chart"
-      isIcon
-      styles={buttonStyle}
-    />
+    <Tooltip title="Dashboard">
+      <Fab
+        onClick={() => history.push('/dashboard')}
+        aria-label="dashboard"
+        style={buttonStyle}
+        color="default"
+        size="medium"
+      >
+        <i className="material-icons">show_chart</i>
+      </Fab>
+    </Tooltip>
   );
 
   return (
-    <div className={c.container}>
-      <FloatButton
-        onClick={() => window.location="/logout"}
-        text="exit_to_app"
-        isIcon
-        styles={buttonStyle}
-      />
-      {location.pathname === '/' ? dashboard : backToHome}
-    </div>
+    <AppStateContext.Consumer>
+      {( { onEdit } ) => (
+        <div className={c.container}>
+          <Tooltip title="Logout">
+            <Fab aria-label="logout" style={buttonStyle} size="medium">
+              <i className="material-icons">exit_to_app</i>
+            </Fab>
+          </Tooltip>
+          {location.pathname === '/' ? dashboard : backToHome}
+          {onEdit &&
+            <Tooltip title="Submit">
+              <Fab aria-label="logout" style={buttonStyle} size="medium" color="primary">
+                <i className={cx(c.confirmBtn, "material-icons")}>check</i>
+              </Fab>
+            </Tooltip>
+          }
+        </div>
+      )}
+    </AppStateContext.Consumer>
   );
 }
 
@@ -55,6 +79,12 @@ const styles = {
     right: '10px',
     display: 'flex',
     flexFlow: 'row-reverse'
+  },
+  button: {
+    marginLeft: '5px'
+  },
+  confirmBtn: {
+    color: 'white'
   }
 };
 

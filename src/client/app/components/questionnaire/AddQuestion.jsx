@@ -2,11 +2,12 @@
 import React from 'react';
 import { compose } from 'react-apollo';
 import injectSheet, { withTheme } from 'react-jss';
+import TextField from '@material-ui/core/TextField';
+// import Modal from '@material-ui/core/Modal';
 import withAddQuestion from 'app/composers/mutations/withAddQuestion';
 import withUpdateQuestion from 'app/composers/mutations/withUpdateQuestion';
 import AnswerScale from './AnswerScale';
 import Modal from '../Modal';
-import TextField from '../TextField';
 import FlexButton from '../FlexButton';
 import LoadingView from '../LoadingView';
 
@@ -88,7 +89,7 @@ class AddQuestion extends React.Component<Props, State> {
             <TextField
               placeholder={placeholder}
               value={this.state.questionDraft}
-              onChange={s => this.setState({ questionDraft: s })}
+              onChange={s => this.setState({ questionDraft: s.target.value })}
             />
           </div>
           <div className={c.actionGroup}>
