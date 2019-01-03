@@ -44,7 +44,7 @@ const styles = theme => ({
     flex: '1 0 14%',
     cursor: 'pointer',
     fontWeight: '300',
-    height: '50px',
+    height: '70px',
     position: 'relative',
     '&:hover': {
       backgroundColor: '#eee'

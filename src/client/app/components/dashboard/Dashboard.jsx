@@ -2,6 +2,7 @@
 import React from 'react';
 import injectSheet from 'react-jss';
 import moment from 'moment';
+import Paper from '@material-ui/core/Paper';
 import Calendar from 'app/components/calendar/Calendar';
 import DetailsView from './DetailsView';
 
@@ -25,12 +26,19 @@ const Dashboard = ({ classes: c, match }: Props) => {
     <DetailsView activeDate={mode==='details' && moment(`${year}-${month}-${day}`, "YYYY-MM-DD").format()} />);
   const calendarView = (mode !== 'details' &&
     <Calendar activeDate={mode && moment(`${year}-${month}`, "YYYY-MM").format()} />);
+  const paperStyle = {
+    width: '800px',
+    minHeight: '300px',
+    padding: '18px',
+    marginTop: '80px',
+    position: 'relative'
+  };
 
   return (
-    <div className={c.container}>
+    <Paper style={paperStyle}>
       {details}
       {calendarView}
-    </div>
+    </Paper>
   );
 }
 
@@ -43,7 +51,7 @@ const styles = {
     marginTop: '80px',
     borderRadius: '4px',
     position: 'relative'
-  },
+  }
 };
 
 export default injectSheet(styles)(Dashboard);

@@ -123,7 +123,7 @@ const styles = theme => ({
   fixed: {
     position: 'fixed',
     top: '0',
-    width: '700px',
+    width: '800px',
     height: '40px',
     backgroundColor: 'white',
     left: '0',

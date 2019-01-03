@@ -7,6 +7,8 @@ import AddQuestion from 'app/components/questionnaire/AddQuestion';
 import Button from 'app/components/Button';
 import Flag from './Flag';
 import LoadingView from './LoadingView';
+import Paper from '@material-ui/core/Paper';
+import { AppStateContext } from './AppStateContext';
 
 type Props = {
   classes: Object,
@@ -19,6 +21,7 @@ type State = {
 }
 
 class Home extends React.Component<Props, State> {
+  static contextType = AppStateContext;
   state = {
     modalOpen: false,
     writeMode: false,
@@ -41,28 +44,26 @@ class Home extends React.Component<Props, State> {
 
   render() {
     const { classes: c, theme } = this.props;
-
     const PageFlags = (
       <div className={c.flags}>
         <Flag
           icon="/img/answer.svg"
           custom
           hex={theme.colorPrimary}
-          onClick={() => this.setState({ writeMode: true })}
+          onClick={this.context.toggleEdit}
           extendable
           onConfirm={this.onClickSubmit}
-          onCancel={() => this.setState({ writeMode: false })}
+          onCancel={this.context.toggleEdit}
+          title="Edit"
+          placement="right"
         />
         <Flag
           icon="add_circle"
           hex={theme.colorSecondary}
           styles={{ marginTop: '20px' }}
           onClick={() => this.setState({ modalOpen: true })}  
-        />
-        <Flag
-          icon="swap_vert"
-          hex={theme.colorAccent}
-          styles={{ marginTop: '20px' }}
+          title="Add Question"
+          placement="right"
         />
       </div>
     );
@@ -71,13 +72,18 @@ class Home extends React.Component<Props, State> {
         onSuccess={() => this.closeModal()}
         onClose={() => this.closeModal()}
       />;
-  
+    const paperStyle = {
+      width: '800px',
+      minHeight: '300px',
+      padding: '18px 28px',
+      marginTop: '80px',
+      position: 'relative'
+    };
+
     return (
-      <div className={c.container}>
+      <Paper style={paperStyle}>
         <h3 className={c.headline}>Did I do my best...</h3>
         <QuestionList
-          writeMode={this.state.writeMode}
-          onSwitchMode={() => this.setState({ writeMode: false })}
           onSubmit={this.state.isSubmitting}
           onFinishSubmit={this.onFinishSubmit}
         />
@@ -86,21 +92,12 @@ class Home extends React.Component<Props, State> {
         </div>
         {addQuestionModal}
         {this.state.isSubmitting && <LoadingView message="Updating..." />}
-      </div>
+      </Paper>
     );
   }
 }
 
 const styles = theme => ({
-  container: {
-    backgroundColor: 'white',
-    width: '700px',
-    minHeight: '300px',
-    padding: '18px',
-    marginTop: '80px',
-    borderRadius: '4px',
-    position: 'relative'
-  },
   pageFlags: {
     position: 'absolute',
     left: '100%',
@@ -111,7 +108,7 @@ const styles = theme => ({
   },
   headline: {
     marginBottom: '36px',
-    marginLeft: '-18px',
+    marginLeft: '-28px',
     paddingLeft: '18px',
     backgroundColor: theme.colorNeutral,
     width: '300px',

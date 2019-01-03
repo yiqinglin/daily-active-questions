@@ -4,6 +4,7 @@ import React from 'react';
 import injectSheet from 'react-jss'
 import Color from 'tinycolor2';
 import classNames from 'classnames';
+import Tooltip from '@material-ui/core/Tooltip';
 
 type Props = {
   classes: Object,
@@ -12,22 +13,27 @@ type Props = {
   hex: String,
   styles: Object,
   extendable: boolean,
+  title: String,
+  placement: String,
   onClick: Function,
   onConfirm: Function,
   onCancel: Function
 }
 
 type State = {
-  extended: boolean
+  extended: boolean,
+  open: boolean
 }
 
 class Flag extends React.Component<Props, State> {
   state = {
-    extended: false
+    extended: false,
+    open: false
   }
 
   handleClick = () => {
     if (this.props.extendable) {
+      this.handleTooltipClose();
       this.setState({ extended: true });
     }
     this.props.onClick();
@@ -47,9 +53,23 @@ class Flag extends React.Component<Props, State> {
     this.props.onConfirm();
   }
 
+  handleTooltipOpen= () => {
+    if (!this.props.extendable || !this.state.extended) {
+      this.setState({ open: true });
+    }
+  }
+
+  handleTooltipClose= () => {
+    if (!this.props.extendable || !this.state.extended) {
+      this.setState({ open: false });
+    }
+  }
+
+  
+
   render() {
-    const { classes: c, custom, icon, styles, onConfirm, onCancel, extendable } = this.props;
-    const { extended } = this.state;
+    const { classes: c, custom, icon, styles, onConfirm, onCancel, extendable, title, placement } = this.props;
+    const { extended, open } = this.state;
 
     const extendedButtons = extended && (
       <div className={c.extendedButtons}>
@@ -68,10 +88,21 @@ class Flag extends React.Component<Props, State> {
       </div>);
 
     return (
-      <div className={classNames(c.container, extended && c.extended)} style={styles}>
-        {extendable && extendedButtons}
-        {regButton}
-      </div>
+      <Tooltip
+        title={title}
+        placement={placement}
+        open={open}
+      >
+        <div
+          className={classNames(c.container, extended && c.extended)}
+          style={styles}
+          onMouseEnter={this.handleTooltipOpen}
+          onMouseLeave={this.handleTooltipClose}
+        >
+          {extendable && extendedButtons}
+          {regButton}
+        </div>
+      </Tooltip>
     )
   }
 }

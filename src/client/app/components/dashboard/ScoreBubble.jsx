@@ -15,18 +15,19 @@ const ScoreBubble = ({ classes: c, score }: Props) => (
   >{score}</div>
 );
 
+
 const styles = theme => ({
   container: {
-    width: '30px',
-    height: '30px',
-    borderRadius: '30px',
+    width: '40px',
+    height: '40px',
+    borderRadius: '40px',
     backgroundColor: props => theme[scoreToColor(props.score)],
     color: 'white',
     fontWeight: '500',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    fontSize: '11px',
+    fontSize: '12px',
     fontWeight: '700'
   }
 });
