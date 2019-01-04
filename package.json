@@ -44,6 +44,7 @@
     "passport": "^0.4.0",
     "passport-google-oauth": "^1.0.0",
     "react": "^16.6.3",
+    "react-addons-css-transition-group": "^15.6.2",
     "react-apollo": "^2.1.4",
     "react-dom": "^16.6.3",
     "react-jss": "^8.4.0",
