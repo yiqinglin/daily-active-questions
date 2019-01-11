@@ -1,6 +1,8 @@
 // @flow
 import React from 'react';
-import injectSheet from 'react-jss';
+import { compose } from 'react-apollo';
+import injectSheet, { withTheme } from 'react-jss';
+import Loader from 'react-loader-spinner';
 
 type Props = {
   classes: Object,
@@ -24,15 +26,21 @@ class LoadingView extends React.Component<Props> {
   }
 
   render() {
-    const { classes: c, message, quoteCredit } = this.props;
+    const { classes: c, message, quoteCredit, theme } = this.props;
 
     return (
-      <div className={c.container}>
+      <div className={c.container} key="1">
+        <div className={c.loader}>
+          <Loader
+            type="Rings"
+            color={theme.colorPrimary}
+            height={120}
+            width={120}
+          />
+        </div>
         <div>
-          <p>{message ? message : 'Loading...'}</p>
-          {quoteCredit && 
-            <p className={c.credit}>- {quoteCredit}</p>
-          }
+          <p>If you don't know where you are going, any road will take you there.</p>
+          <p className={c.credit}>- Lewis Carroll</p>
         </div>
       </div>
     );
@@ -62,7 +70,21 @@ const styles = {
     fontSize: '15px',
     fontStyle: 'italic',
     textAlign: 'right'
+  },
+  loader: {
+    position: 'absolute',
+    top: '0',
+    bottom: '0',
+    left: '0',
+    right: '0',
+    margin: 'auto',
+    width: '120px',
+    height: '120px'
   }
 };
 
-export default injectSheet(styles)(LoadingView);
+  
+  export default compose(
+    withTheme,
+    injectSheet(styles)
+  )(LoadingView);

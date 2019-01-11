@@ -8,6 +8,7 @@ import Waypoint from 'react-waypoint';
 import { withRouter } from 'react-router-dom';
 import { scoreToColor } from 'app/lib/helpers';
 import withDailyDetails from 'app/composers/queries/withDailyDetails';
+import LoadingView from '../LoadingView';
 
 type DailyDetails = {
   date: String,
@@ -44,7 +45,7 @@ class DetailsView extends React.Component<Props, State> {
     const { classes: c, activeDate, history, isFetching, dailyDetails } = this.props;
     const { onScrollLeave } = this.state;
     
-    if (isFetching) return (<div>Fetching...</div>);
+    if (isFetching) return (<LoadingView />);
 
     const createRef = (element, date) => {
       if (moment.parseZone(date).isSame(moment.parseZone(activeDate), 'day') && !this.highlightedElem) {
@@ -87,6 +88,7 @@ class DetailsView extends React.Component<Props, State> {
                     <div className={cx(c.value, scoreToColor(question.value))}>
                       {question.value}
                     </div>
+                    <div className={cx(c.backgroundBar, scoreToColor(question.value))} style={{width: `${question.value/10 * 100}%`}}/>
                   </div>
                 )}
                 {daily.questions.length == 0 && (
@@ -153,7 +155,8 @@ const styles = theme => ({
   questionRow: {
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'flex-start'
+    justifyContent: 'flex-start',
+    position: 'relative'
   },
   colorCode: {
     height: '15px',
@@ -222,6 +225,29 @@ const styles = theme => ({
     '&:hover': {
       color: '#ddd',
       backgroundColor: 'transparent'
+    }
+  },
+  backgroundBar: {
+    position: 'absolute',
+    left: '10px',
+    top: '0',
+    bottom: '0',
+    opacity: '.3',
+    height: '100%',
+    '&.colorCodeRed': {
+      backgroundColor: theme.colorCodeRed
+    },
+    '&.colorCodeOrange': {
+      backgroundColor: theme.colorCodeOrange
+    },
+    '&.colorCodeYellow': {
+      backgroundColor: theme.colorCodeYellow
+    },
+    '&.colorCodeGreen': {
+      backgroundColor: theme.colorCodeGreen
+    },
+    '&.colorCodeBlue': {
+      backgroundColor: theme.colorCodeBlue
     }
   }
 });

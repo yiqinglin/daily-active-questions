@@ -2,6 +2,7 @@
 import React from 'react';
 import injectSheet, { withTheme } from 'react-jss';
 import { compose } from 'react-apollo';
+import Button from '@material-ui/core/Button';
 import withActiveQuestions from 'app/composers/queries/withActiveQuestions';
 import withSubmitAnswers from 'app/composers/mutations/withSubmitAnswers';
 import withDeleteQuestion from 'app/composers/mutations/withDeleteQuestion';
@@ -77,6 +78,7 @@ class QuestionList extends React.Component<Props, State> {
     const timestamp = getCurrentTime();
 
     this.props.answer(updatedAnswers, timestamp)
+      .then(() => this.setState({ updatedAnswers: {}}))
       .then(() => this.props.onFinishSubmit())
       .catch(() => console.log('problem!'));
   }
@@ -89,18 +91,14 @@ class QuestionList extends React.Component<Props, State> {
       .catch(() => alert('problem!'));
   }
 
-  handleCancel = () => {
-    this.setState({updatedAnswers: {}});
-    this.context.updateEditState(false);
-  }
-
   render() {
     const { classes: c, activeQuestions, isFetching, writeMode, theme } = this.props;
     const { questionInEdit, deleteConfirm } = this.state;
 
     if (isFetching) {
-      return <div className={c.container}>Retrieving question list...</div>;
+      return (<LoadingView />)
     }
+    
     if (!activeQuestions) return (
       <div className={c.container}>
         <i className="material-icons">sentiment_very_dissatisfied</i>
@@ -112,12 +110,18 @@ class QuestionList extends React.Component<Props, State> {
         <div className={c.container}>Add a new question...</div>
       )
     }
+    const buttonStyle = {
+      height: '50px',
+      borderRadius: '0',
+      boxShadow: 'none',
+      color: 'white'
+    };
 
     const DeleteModal = this.state.deleteConfirm.title && (
       <Modal
         onClose={() => this.setState({ deleteConfirm: { title: '', id: '' }})}
         bgIcon="delete_outline"
-        iconBgColor={theme.colorPrimary}
+        iconBgColor={theme.colorReject}
       >
         <div className={c.modalContainer}>
           <div className={c.content}>
@@ -125,16 +129,20 @@ class QuestionList extends React.Component<Props, State> {
             <b>{this.state.deleteConfirm.title}</b>
           </div>
           <div className={c.actionGroup}>
-            <FlexButton
-              theme="REJECT"
-              text="confirm"
+            <Button
+              color="secondary"
+              fullWidth
+              variant="contained"
               onClick={this.handleDelete}
-            />
-            <FlexButton
-              theme="CANCEL"
-              text="cancel"
+              style={buttonStyle}
+            >confirm</Button>
+            <Button
+              variant="contained"
+              color="default"
               onClick={() => this.setState({ deleteConfirm: { title: '', id: '' }})}  
-            />
+              style={buttonStyle}
+              fullWidth
+            >cancel</Button>
           </div>
         </div>
       </Modal>
@@ -151,7 +159,7 @@ class QuestionList extends React.Component<Props, State> {
               editQuestion={() => this.setState({ questionInEdit: { title: q.title, id: q.id }})}
             >
               <AnswerScale 
-                selected={this.context.isEditing ? this.state.updatedAnswers[q.id] : q.answer}
+                selected={this.state.updatedAnswers[q.id] || q.answer}
                 onSelect={v => this.updateAnswer(q.id, v)}
               />
             </Question>

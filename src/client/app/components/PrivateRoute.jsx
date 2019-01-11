@@ -4,7 +4,7 @@ import { Route, Redirect } from 'react-router-dom';
 import withUser from 'app/composers/queries/withUser';
 
 function PrivateRoute({ component: Component, isFetching, user, ...rest }) {
-  if (isFetching) return (<div>Checking...</div>);  
+  if (isFetching) return null;  
   return (
     <Route
       {...rest}

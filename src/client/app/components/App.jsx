@@ -36,7 +36,8 @@ const MuiTheme = createMuiTheme({
   palette: {
     default: { main: theme.colorNeutral},
     primary: { main: theme.colorPrimary},
-    secondary: { main: theme.colorSecondary}
+    secondary: { main: theme.colorSecondary},
+    error: { main: theme.colorReject}
   },
   // To mute the warning of the upcoming typography migration: https://material-ui.com/style/typography/#migration-to-typography-v2
   typography: { useNextVariants: true }

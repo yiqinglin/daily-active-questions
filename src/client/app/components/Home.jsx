@@ -97,7 +97,7 @@ class Home extends React.Component<Props, State> {
           {PageFlags}
         </div>
         {addQuestionModal}
-        {this.context.isSubmitting && <LoadingView message="Updating..." />}
+        {this.context.isSubmitting && <LoadingView />}
       </Paper>
     );
   }

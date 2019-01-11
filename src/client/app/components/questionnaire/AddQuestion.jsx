@@ -3,12 +3,11 @@ import React from 'react';
 import { compose } from 'react-apollo';
 import injectSheet, { withTheme } from 'react-jss';
 import TextField from '@material-ui/core/TextField';
-// import Modal from '@material-ui/core/Modal';
+import Button from '@material-ui/core/Button';
 import withAddQuestion from 'app/composers/mutations/withAddQuestion';
 import withUpdateQuestion from 'app/composers/mutations/withUpdateQuestion';
 import AnswerScale from './AnswerScale';
 import Modal from '../Modal';
-import FlexButton from '../FlexButton';
 import LoadingView from '../LoadingView';
 
 type QuestionType = {
@@ -44,8 +43,8 @@ class AddQuestion extends React.Component<Props, State> {
     const { question } = this.props;
     const { questionDraft } = this.state;
     
-    this.setState({ loading: true });
     if (!!questionDraft) {
+      this.setState({ loading: true });
       if (question) {
         this.handleAddQuestion(questionDraft);
       } else {
@@ -75,40 +74,55 @@ class AddQuestion extends React.Component<Props, State> {
     const { classes: c, theme, onClose, question } = this.props;
     const placeholder = question ? question.title : "to make friends?";
     const headline = question ? "Edit question" : "Add a question";
+    const buttonStyle = {
+      height: '50px',
+      borderRadius: '0',
+      boxShadow: 'none',
+      color: 'white'
+    };
 
     return (
-      <Modal
-        onClose={onClose}
-        bgIcon="edit"
-        iconBgColor={theme.colorPrimary}
-      >
-        <div className={c.container}>
-          <div className={c.content}>
-            <h3>{headline}</h3>
-            <b>Did I do my best...</b>
-            <TextField
-              placeholder={placeholder}
-              value={this.state.questionDraft}
-              onChange={s => this.setState({ questionDraft: s.target.value })}
-            />
+      <div>
+        <Modal
+          onClose={onClose}
+          bgIcon="edit"
+          iconBgColor={theme.colorPrimary}
+        >
+          <div className={c.container}>
+            <div className={c.content}>
+              <h3>{headline}</h3>
+              <b>Did I do my best...</b>
+              <TextField
+                placeholder={placeholder}
+                value={this.state.questionDraft}
+                onChange={s => this.setState({ questionDraft: s.target.value })}
+                style={{ width: '100%' }}
+              />
+            </div>
+            <div className={c.actionGroup}>
+              <Button
+                color="secondary"
+                disabled={!this.state.questionDraft}
+                fullWidth
+                variant="contained"
+                onClick={this.onSubmit}
+                style={buttonStyle}
+              >submit</Button>
+              <Button
+                variant="contained"
+                color="default"
+                onClick={this.props.onClose}
+                style={buttonStyle}
+                fullWidth
+              >cancel</Button>
+            </div>
           </div>
-          <div className={c.actionGroup}>
-            <FlexButton
-              theme="PRIMARY"
-              text="submit"
-              onClick={this.onSubmit}  
-              disabled={!this.state.questionDraft}  
-            />
-            <FlexButton theme="CANCEL" text="cancel" onClick={this.props.onClose} />
-          </div>
-        </div>
+        </Modal>
         {this.state.loading && 
-          <LoadingView
-            message="If you don't know where you are going, any road will take you there." 
-            quoteCredit="Lewis Carroll"  
-          />
+          <LoadingView />
         }
-      </Modal>
+      </div>
+      
     )
   }
 }

@@ -1,18 +1,8 @@
-/***
- * A note about this Modal component.
- * I'm planning to use Mater ial-UI (https://github.com/mui-org/material-ui)
- * for many of the UI components, including this Modal. However, the latest
- * Material-UI requires react version to be 16.3 or higher while I'm still
- * (unfortunately) running on v15. 
- * The plan is to finish the majority of this app's functionality before
- * working on migrating the project to the lastest react version.
- * The integration of Masterial-UI and the deprecation of this Modal
- * component will happen thereafter.
- */
 // @flow
 import * as React from 'react';
 import injectSheet from 'react-jss'
 import FlexButton from './FlexButton';
+import Paper from '@material-ui/core/Paper';
 
 type Props = {
   classes: Object,
@@ -23,15 +13,28 @@ type Props = {
   containerStyle: Object // Additional modal style provided by the user that will override the default style.
 }
 
+const containerDefaultStyle = {
+  zIndex: '10',
+  position: 'fixed',
+  margin: 'auto',
+  left: '0',
+  right: '0',
+  top: '0',
+  bottom: '0',
+  width: '500px',
+  height: '300px',
+  backgroundColor: 'white',
+  overflow: 'hidden'
+}
 const Modal = ({ classes: c, containerStyle, onClose, children, bgIcon, iconBgColor }: Props) => (
   <div>
     <div className={c.backdrop} onClick={onClose} />
-    <div className={c.container} style={containerStyle}>
+    <Paper style={{...containerDefaultStyle, ...containerStyle}}>
       {children}
       <div className={c.decoIcon} style={{ backgroundColor: iconBgColor }}>
         <i className="material-icons">{bgIcon}</i>
       </div>
-    </div>
+    </Paper>
   </div>
 );
 
@@ -44,19 +47,6 @@ const styles = {
     bottom: '0',
     backgroundColor: 'rgba(0,0,0,0.35)',
     zIndex: '5'
-  },
-  container: {
-    zIndex: '10',
-    position: 'fixed',
-    margin: 'auto',
-    left: '0',
-    right: '0',
-    top: '0',
-    bottom: '0',
-    width: '500px',
-    height: '300px',
-    backgroundColor: 'white',
-    overflow: 'hidden'
   },
   decoIcon: {
     position: 'absolute',

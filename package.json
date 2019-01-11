@@ -48,6 +48,7 @@
     "react-apollo": "^2.1.4",
     "react-dom": "^16.6.3",
     "react-jss": "^8.4.0",
+    "react-loader-spinner": "^2.1.0",
     "react-router-dom": "^4.3.1",
     "react-waypoint": "^8.1.0",
     "tinycolor2": "^1.4.1",
