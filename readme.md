@@ -1,4 +1,5 @@
-# Daily Active Questions
+# Reflekt - Daily Questions that Make a Difference
+![Reflekt Logo](/public/img/logo.png)
 
 ## To set up
 
