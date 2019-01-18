@@ -65,7 +65,7 @@ class Home extends React.Component<Props, State> {
         />
         <Flag
           icon="add_circle"
-          hex={theme.colorSecondary}
+          hex={theme.colorAccent}
           styles={{ marginTop: '20px' }}
           onClick={() => this.setState({ modalOpen: true })}  
           title="Add Question"

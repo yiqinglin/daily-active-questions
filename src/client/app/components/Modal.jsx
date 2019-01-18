@@ -1,7 +1,6 @@
 // @flow
 import * as React from 'react';
 import injectSheet from 'react-jss'
-import FlexButton from './FlexButton';
 import Paper from '@material-ui/core/Paper';
 
 type Props = {

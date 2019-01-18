@@ -73,7 +73,7 @@ const HomeActions = ({ classes: c, placeholder, value, onChange, history, locati
             }
             {location.pathname === '/' ? dashboard : backToHome}
             <Tooltip title="Logout" key="logout">
-              <Fab aria-label="logout" style={buttonStyle} size="medium">
+              <Fab aria-label="logout" style={buttonStyle} size="medium" href="/logout">
                 <i className="material-icons">exit_to_app</i>
               </Fab>
             </Tooltip>

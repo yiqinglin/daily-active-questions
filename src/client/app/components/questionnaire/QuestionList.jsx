@@ -13,7 +13,6 @@ import Question from './Question';
 import AnswerScale from './AnswerScale';
 import AddQuestion from './AddQuestion';
 import Modal from '../Modal';
-import FlexButton from '../FlexButton';
 import LoadingView from '../LoadingView';
 
 type Props = {
@@ -121,7 +120,7 @@ class QuestionList extends React.Component<Props, State> {
       <Modal
         onClose={() => this.setState({ deleteConfirm: { title: '', id: '' }})}
         bgIcon="delete_outline"
-        iconBgColor={theme.colorReject}
+        iconBgColor={theme.colorAccent}
       >
         <div className={c.modalContainer}>
           <div className={c.content}>

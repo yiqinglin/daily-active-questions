@@ -57,7 +57,7 @@ const styles = theme => ({
     top: '5px'
   },
   weekend: {
-    color: theme.colorReject
+    color: theme.colorAccent
   },
   neighborMonth: {
     color: `${theme.colorNeutral} !important`

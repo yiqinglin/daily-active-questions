@@ -33,7 +33,7 @@ class LoadingView extends React.Component<Props> {
         <div className={c.loader}>
           <Loader
             type="Rings"
-            color={theme.colorPrimary}
+            color={theme.colorAccent}
             height={120}
             width={120}
           />

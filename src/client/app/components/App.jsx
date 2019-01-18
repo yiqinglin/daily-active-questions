@@ -2,6 +2,7 @@
 import React from 'react';
 import injectSheet, { ThemeProvider } from 'react-jss';
 import { compose } from 'react-apollo';
+import cx from 'classnames';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import Home from 'app/components/Home';
@@ -19,17 +20,15 @@ type Props = {
 }
 
 const theme = {
-  colorPrimary: '#F9CE3E',
-  colorSecondary: '#7EA391',
-  colorAllow: '#94A37E',
-  colorReject: '#BC8485',
-  colorAccent: '#94A37E',
-  colorNeutral: '#AAAAAA',
-  colorCodeRed: '#540B0E',
-  colorCodeOrange: '#9E2A2B',
-  colorCodeYellow: '#E09F3E',
-  colorCodeGreen: '#82AD6D',
-  colorCodeBlue: '#335C67'
+  colorPrimary: '#34495E',
+  colorSecondary: '#F1C40F',
+  colorAccent: '#c0392b',
+  colorNeutral: '#bdc3c7',
+  colorCodeRed: '#c0392b',
+  colorCodeOrange: '#d35400',
+  colorCodeYellow: '#f39c12',
+  colorCodeGreen: '#27ae60',
+  colorCodeBlue: '#2c3e50'
 };
 
 const MuiTheme = createMuiTheme({
@@ -37,7 +36,7 @@ const MuiTheme = createMuiTheme({
     default: { main: theme.colorNeutral},
     primary: { main: theme.colorPrimary},
     secondary: { main: theme.colorSecondary},
-    error: { main: theme.colorReject}
+    error: { main: theme.colorAccent}
   },
   // To mute the warning of the upcoming typography migration: https://material-ui.com/style/typography/#migration-to-typography-v2
   typography: { useNextVariants: true }
@@ -69,6 +68,7 @@ class App extends React.Component<Props, State> {
 
   render() {
     const { classes: c } = this.props;
+    const isOnLoginPage = window.location.href.split('/').pop() === 'login';
 
     return (
       <MuiThemeProvider theme={MuiTheme}>
@@ -76,13 +76,18 @@ class App extends React.Component<Props, State> {
           <AppStateContext.Provider value={this.state}>
             <Router>
               <div className={c.container}>
-                <div className={c.titlePiece}>Daily Active Questions</div>
+                <div className={c.menuBar}>
+                  <img src="/img/logo_with_text.png"/>
+                </div>
                 <Switch>
                   <Route path="/login" component={Login} />
                   <PrivateRoute path="/dashboard/:mode?/:year?/:month?/:day?" component={Dashboard} />
                   <PrivateRoute path="/" component={Home} />
                 </Switch>
                 <PrivateRoute path="/" component={HomeActions} />
+                <div className={cx(c.backgroundElements, isOnLoginPage && c.hide)}>
+                  reflekt
+                </div>
               </div>
             </Router>
           </AppStateContext.Provider>
@@ -100,18 +105,29 @@ const styles = {
     justifyContent: 'center',
     position: 'relative'
   },
-  titlePiece: {
-    fontWeight: '700',
-    fontSize: '130px',
-    textAlign: 'center',
-    height: '200px',
-    marginTop: '-100px',
-    lineHeight: '200px',
-    color: 'white',
-    whiteSpace: 'nowrap',
-    width: '100%',
-    overflow: 'hidden',
-    textTransform: 'uppercase'
+  menuBar: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '80px',
+    marginTop: '10px',
+    '& img': {
+      height: '100%',
+      width: 'auto'
+    }
+  },
+  backgroundElements: {
+    zIndex: '-1',
+    left: '-20px',
+    bottom: '0',
+    position: 'fixed',
+    fontFamily: '"Barlow", sans-serif',
+    fontSize: '250px',
+    fontWeight: '500',
+    color: theme.colorAccent
+  },
+  hide: {
+    display: 'none'
   }
 };
 

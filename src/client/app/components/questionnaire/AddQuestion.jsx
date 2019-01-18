@@ -101,9 +101,9 @@ class AddQuestion extends React.Component<Props, State> {
             </div>
             <div className={c.actionGroup}>
               <Button
-                color="secondary"
+                color="primary"
                 disabled={!this.state.questionDraft}
-                fullWidth
+                fullWidth 
                 variant="contained"
                 onClick={this.onSubmit}
                 style={buttonStyle}
