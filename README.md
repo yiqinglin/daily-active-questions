@@ -45,4 +45,6 @@ The app uses [Firebase Cloud Firestore](https://firebase.google.com/docs/firesto
 
 The app uses Google Auth for user signups and logins. Follow the steps here [https://developers.google.com/identity/sign-in/web/sign-in](https://developers.google.com/identity/sign-in/web/sign-in) to set up. Save `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` in a `.env` file in the root directory.
 
+## License
 
+Reflekt is MIT licensed.
