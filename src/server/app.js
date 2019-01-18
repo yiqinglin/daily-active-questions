@@ -13,7 +13,7 @@ import settings from 'settings';
 import schema from '~/graphql';
 
 // Initialize firebase db.
-const serviceAccount = require('../../daily-active-questions-firebase-adminsdk-qrgh4-b8674391d6.json');
+const serviceAccount = require('../../refleckt-app-firebase-adminsdk-qrgh4-b8674391d6.json');
 
 const firebaseApp = firebaseAdmin.initializeApp({
   credential: firebaseAdmin.credential.cert(serviceAccount)
