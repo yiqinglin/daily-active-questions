@@ -16,7 +16,7 @@ const Login = ({ classes: c}: Props) => (
       imgSrc="/img/new-google-favicon-512.png"
     />
     <Button
-      onClick={() => console.log('About this app.')}
+      onClick={() => window.open("https://github.com/yiqinglin/reflekt-app", "_blank")}
       text="About this app"
       styles={{ width: '280px' }}
     />
