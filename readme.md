@@ -1,5 +1,5 @@
-# Reflekt - Daily Questionsthat Make a Difference
-![Reflekt Logo](/public/img/logo.png | width=200)
+# Reflekt - Daily Questions that Make a Difference
+<img src="/public/img/logo.png" width="200" alt="Reflekt Logo" />
 
 
 ## About Reflekt
